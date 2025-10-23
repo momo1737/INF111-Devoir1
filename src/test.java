@@ -10,5 +10,6 @@ public class test {
         System.out.println("jai un esti de gros zizi comme niluz");//c'est rayanael
         System.out.println("jai un ptit zizi comme Rayteuch momi");
         //JE RERSTETE
+        //toz
     }
 }
