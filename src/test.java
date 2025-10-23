@@ -6,5 +6,6 @@ public class test {
         System.out.println("je m'appelle comment ?(dis daddy");
         String c = a.nextLine();
         System.out.println("tu t'appelle "+c);
+        System.out.println("test2 goooooodboy");
     }
 }
