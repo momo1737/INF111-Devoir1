@@ -7,5 +7,6 @@ public class test {
         String c = a.nextLine();
         System.out.println("tu t'appelle "+c);
         System.out.println("test2 goooooodboy");
+        System.out.println("jai un esti de gros zizi comme niluz");//c'est rayanael
     }
 }
