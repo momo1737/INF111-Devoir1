@@ -1,0 +1,94 @@
+
+---
+
+# 3) Ordre chronologique des étapes + pourquoi + avantages
+
+Cet ordre te fait **monter en couches** : d’abord la physique, puis les abstractions réseau, puis les fonctionnalités. À chaque étape, tu peux **tester isolément** et corriger vite.
+
+## Étape 0 — Squelettes & packages (5–10 min)
+- Crée les packages de l’énoncé (`modele.physique`, `modele.reseau`, `modele.communication`, etc.) et les classes **vides** (stubs) avec signatures.
+- **Pourquoi ?** Clarifie l’architecture + évite les imports cassés.
+- **Avantage :** L’équipe peut coder en parallèle sans se marcher dessus. :contentReference[oaicite:1]{index=1}
+
+## Étape 1 — Physique du jeu (3.1) : `Position`, `Carte`
+- Implémente `Position` (distance euclidienne, toString) puis `Carte` (taille 1920×1080, position aléatoire, ajustement toroïdal).
+- **Pourquoi ?** Tout le reste dépend d’une **position** cohérente et d’un monde toroïdal.
+- **Avantages :**
+  - Tests unitaires simples (crée un point, sors-le de la carte, ajuste, vérifie).
+  - Base fiable pour les objets mobiles. :contentReference[oaicite:2]{index=2}
+
+## Étape 2 — Noyau d’héritage (3.2.1–3.2.2) : `ObjetPhysique` → `ObjetMobile`
+- `ObjetPhysique` contient la position ; `ObjetMobile` ajoute direction/vitesse/déviation + `seDeplacer()` (gaussienne, cos/sin, ajustement carte).
+- **Pourquoi ?** Centraliser le **mouvement** et éviter le code dupliqué.
+- **Avantages :** Tous les entités mouvantes héritent d’un comportement testé une fois. :contentReference[oaicite:3]{index=3}
+
+## Étape 3 — Interfaces & stubs réseau (3.2.3–3.2.4) : `UniteCellulaire`, `Cellulaire`, `Antenne`, `Message`, `Connexion`
+- Déclare l’interface `UniteCellulaire` (toutes méthodes), puis :
+  - `Message` (POJO), `Connexion` (2 antennes, numéro, `miseAJourAntenne`),
+  - `Antenne` (hérite de `ObjetPhysique` + collection de `Cellulaire`),
+  - `Cellulaire` (hérite de `ObjetMobile`, implémente `UniteCellulaire`, **stubs** des méthodes).
+- **Pourquoi ?** Figer les **contrats** d’interaction avant la logique.
+- **Avantage :** Permet de compiler et d’écrire des tests/console logs même sans logique complète. :contentReference[oaicite:4]{index=4}
+
+## Étape 4 — Gestionnaire `Reseau` (constantes, collections, création) (3.2 “Code fourni” + `run`)
+- Ajoute constantes (période, vitesses, nb antennes/cellulaires, code non connecté), les collections, création d’antennes/cellulaires (numéros via `GestionnaireScenario`), getters.
+- Active le code commenté dans `run()` pour **voir la carte** (antennes grises, cellulaires bleus).
+- **Pourquoi ?** Avoir un **bac à sable visuel** pour tester les prochaines features.
+- **Avantage :** Déverminage visuel immédiat. :contentReference[oaicite:5]{index=5}
+
+## Étape 5 — Fonctionnalité 1 : lien **Cellulaire ↔ antenne la plus proche** (3.3.1)
+- `Reseau.getAntenneLaPlusProche(pos)`, `Antenne.ajouter/enlever(Cellulaire)`.
+- Dans `Cellulaire.effectuerTour()`: à chaque tick, s’assurer d’être sur l’antenne la plus proche (reconnexion si besoin).
+- **Pourquoi ?** Pré-requis à **toutes** les communications.
+- **Avantages :** Tests faciles (1 cellulaire, plusieurs antennes) + logs clairs. :contentReference[oaicite:6]{index=6}
+
+## Étape 6 — Fonctionnalité 2 : **Établir une connexion** (3.3.2)
+- Chaîne : `Cellulaire.appeler` → `Antenne.appeler` → `Reseau.relayerAppel` → `Antenne.repondre` → `Cellulaire.repondre` → création `Connexion`.
+- **Pourquoi ?** C’est le **circuit** qui rend possible l’échange de messages.
+- **Avantages :** Tu peux tracer chaque étape avec des `println` ciblés. :contentReference[oaicite:7]{index=7}
+
+## Étape 7 — Fonctionnalité 3 : **Mise à jour des connexions si changement d’antenne** (3.3.3)
+- Ajoute `Connexion.miseAJourAntenne`, `Reseau.getConnexionParNumero`, `Antenne.mettreAJourConnexion` → `Reseau.mettreAJourConnexion`.
+- Appelle cette MAJ depuis `Cellulaire` **à chaque** changement d’antenne.
+- **Pourquoi ?** Les liens “suivent” les mobiles, sinon messages perdus.
+- **Avantage :** Robustesse quand les acteurs bougent. :contentReference[oaicite:8]{index=8}
+
+## Étape 8 — Fonctionnalité 4 : **Échange de messages** (3.3.4)
+- `Cellulaire` crée un `Message` (`GestionnaireScenario.obtenirMessage`), passe par `Antenne.envoyer` → `Reseau.relayerMessage` → antenne de destination → `Cellulaire.recevoir`.
+- **Pourquoi ?** Cœur de la **jouabilité** (preuve de concept).
+- **Avantage :** Démo tangible : logs “A → B : <msg>”. :contentReference[oaicite:9]{index=9}
+
+## Étape 9 — Fonctionnalité 5 : **Raccrocher** (3.3.5)
+- Chemin : `Cellulaire.finAppelLocal` → `Antenne.finAppelLocal` → `Reseau.relayerFinAppel` → `Antenne.finAppelDistant` → `Cellulaire.finAppelDistant` + **suppression** de la connexion.
+- **Pourquoi ?** Boucler proprement le cycle d’appel.
+- **Avantage :** Teste la stabilité de l’ensemble. :contentReference[oaicite:10]{index=10}
+
+## Étape 10 — **Boucle d’action** du cellulaire (3.4)
+- À chaque tour : se déplacer → MAJ antenne → si connecté : prob. envoyer / sinon prob. raccrocher ; sinon prob. appeler (selon PROB_*).
+- **Pourquoi ?** Simuler les comportements et **voir la vie** du système.
+- **Avantage :** Permet d’itérer sur les constantes pour équilibrer la démo. :contentReference[oaicite:11]{index=11}
+
+---
+
+# 4) Organisation du dépôt GitHub (clair & propre)
+
+- `src/...` (packages comme dans l’énoncé)
+- `docs/diagrams/uml.mmd` (le bloc Mermaid si tu veux l’externaliser)
+- `README.md`  
+  - Intro rapide du jeu  
+  - **Diagramme Mermaid** (copie le bloc ci-dessus)  
+  - “Comment lancer” (rappeler d’activer `run()` fourni)  
+- **Astuce** : un badge “Architecture: MVC (résumé)” avec un mini schéma Mermaid `graph TD` pour MVC.
+
+---
+
+# 5) Tests rapides à chaque étape
+- **3.1** : crée un `Position`, sors-le du cadre, `Carte.ajuster()` → vérifie.
+- **3.2** : classe de test héritant d’`ObjetMobile` ; plusieurs `seDeplacer()` → position change.
+- **3.3.1** : 1 cellulaire, n antennes → log “antenne la plus proche”.
+- **3.3.2–3** : 2 cellulaires en mouvement → connexion créée puis maintenue lors des handovers.
+- **3.3.4–5** : messages échangés puis raccrochage propre, connexions désinscrites.
+
+---
+
+Si tu veux, envoie-moi **ton package tree actuel** et je te retourne le **diagramme Mermaid personnalisé** + une **checklist de tâches** pour chaque membre de l’équipe (qui code quoi, dans quel ordre).
