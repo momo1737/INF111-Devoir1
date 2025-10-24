@@ -10,6 +10,5 @@ public class test {
         System.out.println("jai un esti de gros zizi comme niluz");//c'est rayanael
         System.out.println("jai un ptit zizi comme Rayteuch momi");
     }
-
-    //(Je test les erreurs de conflit de code avec la pullrequest)
+    //je suis entrain d'apprendre les étapes de résolution du problème pour la pull request
 }
