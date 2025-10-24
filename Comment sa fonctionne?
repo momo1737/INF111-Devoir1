@@ -1,0 +1,74 @@
+🟢 A — J’AI FAIT DU CODE ET JE VEUX L’ENREGISTRER / ENVOYER
+1) Sauvegarder en local (Commit)
+IntelliJ → onglet Commit (en bas à gauche)
+Coche les fichiers modifiés
+Message : écris 1 phrase (ex: “Position: ajout distance()”)
+Clique Commit (⚠️ pas “Commit and Push”)
+👉 Résultat : ton travail est sauvegardé en local (sécurisé).
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+2) Envoyer sur ta branche GitHub (Push)
+Menu Git → Push…
+Bouton Push
+👉 Résultat : ton travail est sur ta branche (ex: aymen) sur GitHub.
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+3) Proposer d’ajouter ton code dans main (Pull Request)
+Sur GitHub (onglet Code) → bouton Compare & pull request
+Vérifie base: main ⬅ compare: ta-branche
+Titre court (ex: “Position: distance() + tests”)
+Create pull request
+👉 L’équipe lit/valide. Quand c’est ok : bouton Merge pull request → Confirm
+(Ne supprimez pas la branche si vous continuez dessus.)
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+🔵 B — JE VEUX RÉCUPÉRER LA DERNIÈRE VERSION DU main
+4) Mettre à jour main sur mon ordi
+En bas à droite, clique sur le nom de branche → main → Checkout
+Git → Update Project… → OK
+👉 Résultat : ton main local = à jour avec GitHub.
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+🟣 C — J’APPLIQUE LES CHANGEMENTS DE main DANS MA BRANCHE
+5) Revenir sur ta branche
+En bas à droite → ta branche (ex: aymen) → Checkout
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+6) Fusionner main → ta branche
+Clique le nom de ta branche (bas droite)
+Choisis main → Merge into Current
+S’il n’y a pas de conflit → c’est fini ✅
+S’il y a conflit → IntelliJ ouvre un outil de fusion :
+Left = ta version, Right = version main, Middle = résultat
+Choisis Accept Left / Right / Both par bloc
+Clique Apply (puis Commit si demandé)
+👉 Résultat : ta branche = ton code + les nouveautés du main.
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+🟠 D — RÈGLES D’OR (anti-galère)
+Toujours Commit avant : avant Update/Merge, fais un Commit (ou Git → Stash Changes… si tu ne veux pas committer).
+Une PR = un petit sujet : plus facile à relire/merger.
+Ne touchez pas directement à main : passez toujours par une Pull Request.
+Si IntelliJ bloque : lis le message, clique sur Resolve/Merge, choisis Left/Right/Both, Apply.
+Après un merge dans main, chacun fait Git → Update Project… pour se mettre à jour.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+🧪 MINI SCÉNARIO RÉSUMÉ
+Tu codes → Commit → Push (sur ta branche) → PR → Merge
+Les autres : Update Project (sur main) → Merge main into [leur branche]
+C’est tout.
