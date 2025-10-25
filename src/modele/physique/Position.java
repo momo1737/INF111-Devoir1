@@ -1,13 +1,14 @@
 package modele.physique;
 
-public class Positon {
+public class Position {
     private double positionX;
     private double positionY;
 
     //Creation du constructeur par parametre
     public Position (double positionX,double positionY){
         this.positionX=positionX;
-        this.positionY=positionY;}
+        this.positionY=positionY;
+    }
 
 //Creation informateur et mutateur
 
@@ -34,6 +35,6 @@ public class Positon {
     //Methode toString??
     @Override
     public String toString(){
-        return ;
+        return String.format("(%.2f, %.2f)", positionX, positionY);
     }
 }
