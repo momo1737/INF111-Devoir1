@@ -1,13 +1,12 @@
 package modele.physique;
 
+import org.w3c.dom.ls.LSOutput;
+
 import javax.crypto.spec.PSource;
 
 public class essaies {
     public static void main(String[] args) {
         Carte monde1 = new Carte();
-
-
-
 
         //test carte
 
@@ -25,5 +24,9 @@ public class essaies {
         System.out.println("Mauvaise "+p2);
         Position p2a = Carte.ajusterToroidal(p2);
         System.out.println("Reajustement de "+ p2a);
+
+        //test de la classe ObjetPhysique
+        ObjetPhysique testOP1 = new ObjetPhysique(new Position(300, 400)) { };
+        System.out.println(testOP1.getPosition());
     }
 }
