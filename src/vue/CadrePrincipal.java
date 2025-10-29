@@ -4,7 +4,7 @@ package vue;
  * 
  * Intègre la logique de confirmation de fermeture de fenêtre
  */
-import java.awt.Dimension;
+/*import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -68,4 +68,4 @@ public class CadrePrincipal extends JFrame implements Runnable{
 		this.setContentPane(panneauPrincipal);
 	}
 
-}
+}*/

@@ -4,37 +4,45 @@ public class Position {
     private double positionX;
     private double positionY;
 
-    //Creation du constructeur par parametre
-    public Position (double positionX,double positionY){
-        this.positionX=positionX;
-        this.positionY=positionY;
+
+    //Constructeur
+    public Position(double positionX,double positionY){
+        this.positionX = positionX;
+        this.positionY = positionY;
     }
 
-//Creation informateur et mutateur
+    //getter et setter -positionX
 
-    //getter
     public double getPositionX(){
-        return positionX;}
+        return positionX;
+    }
+
+    public void setPositionX(double positionX){
+        this.positionX=positionX;
+    }
+
+    //getter et setter -positionY
 
     public double getPositionY(){
-        return positionY;}
-
-    //setter
-    public void setPositionX(double positionX){
-        this.positionX=positionX;}
+        return positionY;
+    }
 
     public void setPositionY(double positionY){
-        this.positionY=positionY;}
+        this.positionY = positionY;
+    }
 
-    //Methode qui retourne la distance entre deux points
-    public double distancePoint(Position pointRecu){
-        double distanceX= positionX-pointRecu.getPositionX();
-        double distanceY= positionY-pointRecu.getPositionY();
-        return Math.sqrt((distanceX*distanceX) + (distanceY*distanceY));}
+    //méthode de la distance euclidienne
+    public double distanceE(Position autre){
+        double Dx = Math.pow(autre.positionX,2) - Math.pow(this.positionX,2);
+        double Dy = Math.pow(autre.positionY,2) - Math.pow(this.positionY,2);
+        double sommeDXY = Dx + Dy;
+        double DE = Math.sqrt(sommeDXY);
+        return DE;
+    }
 
-    //Methode toString??
+    //toString pour afficher la position
     @Override
     public String toString(){
-        return String.format("(%.2f, %.2f)", positionX, positionY);
+        return String.format("Postion = (%.2f;%.2f)",positionX,positionY);
     }
 }

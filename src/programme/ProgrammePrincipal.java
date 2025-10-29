@@ -1,6 +1,6 @@
 package programme;
 
-import modele.reseau.GestionnaireReseau;
+/*import modele.reseau.GestionnaireReseau;
 import vue.CadrePrincipal;
 
 public class ProgrammePrincipal {
@@ -14,4 +14,4 @@ public class ProgrammePrincipal {
     	t.start();
     	
 	}
-}
+}*/

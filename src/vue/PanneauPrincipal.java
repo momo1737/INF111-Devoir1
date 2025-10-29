@@ -12,7 +12,7 @@ package vue;
  * @version Hiver 2021
  */
 
-import java.awt.Color;
+/*import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -38,7 +38,7 @@ public class PanneauPrincipal extends JPanel implements MonObserver{
 	 * Constructeur
 	 * @param taille de la fenêtre
 	 */
-	public PanneauPrincipal(Dimension taille) {
+	/*public PanneauPrincipal(Dimension taille) {
 		
 		this.taille = taille; 
 		rafraichirDessin();
@@ -50,7 +50,7 @@ public class PanneauPrincipal extends JPanel implements MonObserver{
 	/**
 	 * appelé pour mettre à jours le dessin
 	 */
-	private void rafraichirDessin(){
+	/*private void rafraichirDessin(){
 		
 		validate();
 		repaint();		
@@ -60,7 +60,7 @@ public class PanneauPrincipal extends JPanel implements MonObserver{
 	/**
 	 * méthode hérité qui dessine à la fenêtre
 	 */
-	public void paintComponent(Graphics g) {
+	/*public void paintComponent(Graphics g) {
 
 		// convertie en engin graphique 2D
 		Graphics2D g2 = (Graphics2D) g;
@@ -81,7 +81,7 @@ public class PanneauPrincipal extends JPanel implements MonObserver{
 	 * Dessine les cellulaires à l'écran
 	 * @param g référence à engin graphique
 	 */
-	public void dessineCellulaires(Graphics2D g) {
+	/*public void dessineCellulaires(Graphics2D g) {
 		
 		ArrayList<Cellulaire> cellulaires = reseau.getCellulaires();
 		
@@ -117,7 +117,7 @@ public class PanneauPrincipal extends JPanel implements MonObserver{
 	 * Dessine les antennes à l'écran
 	 * @param g référence à engin graphique
 	 */
-	public void dessineAntennes(Graphics2D g) {
+	/*public void dessineAntennes(Graphics2D g) {
 
 		ArrayList<Antenne> antennes = reseau.getAntennes();
 		
@@ -135,4 +135,4 @@ public class PanneauPrincipal extends JPanel implements MonObserver{
 		rafraichirDessin();		
 	}
 	
-}
+}*/

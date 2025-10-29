@@ -12,7 +12,7 @@ package modele.gestionnaires;
  *  @revision hiver 2021
  */
 
-import java.io.File;
+/*import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -45,7 +45,7 @@ public class GestionnaireScenario {
 	/**
 	 * m�thode qui charge le fichier de conversation
 	 */
-	private void chargementDuFichier() {
+	/*private void chargementDuFichier() {
 		
 		try {
 			Scanner scanner = new Scanner(new File(FICHIER_CONVERSATION));
@@ -63,7 +63,7 @@ public class GestionnaireScenario {
 	 * @return String al�atoire
 	 * @ref: https://www.baeldung.com/java-random-string
 	 */
-	private static String generatingRandomAlphabeticString() {
+	/*private static String generatingRandomAlphabeticString() {
 	    int leftLimit = 97; // letter 'a'
 	    int rightLimit = 122; // letter 'z'
 	    int targetStringLength = instance.rand.nextInt(100)+1;
@@ -83,7 +83,7 @@ public class GestionnaireScenario {
 	 * @param numero utilis� pour envoyer le message
 	 * @return le message � envoyer
 	 */
-	public static String obtenirMessage(String numero) {
+	/*public static String obtenirMessage(String numero) {
 		
 		if(instance.numeroCriminel.contains(numero)) {
 			try {
@@ -105,7 +105,7 @@ public class GestionnaireScenario {
 	 * @param exclus le num�ro a exclure des possibilit�s
 	 * @return le num�ro appartenant aux num�ros criminels
 	 */
-	public static String obtenirNumeroCriminelAlea(String exclus) {
+	/*public static String obtenirNumeroCriminelAlea(String exclus) {
 		int index = instance.rand.nextInt(instance.numeroCriminel.size());
 		String numero = instance.numeroCriminel.get(index);
 		
@@ -123,7 +123,7 @@ public class GestionnaireScenario {
 	 * @param exclus le num�ro a exclure des possibilit�s
 	 * @return le num�ro appartenant aux num�ros standards
 	 */
-	public static String obtenirNumeroStandardAlea(String exclus) {
+	/*public static String obtenirNumeroStandardAlea(String exclus) {
 		int index = instance.rand.nextInt(instance.numeroStandard.size());
 		String numero = instance.numeroStandard.get(index);
 		
@@ -139,7 +139,7 @@ public class GestionnaireScenario {
 	 * apr�s l'avoir ajout� � la liste des num�ros criminels
 	 * @return le num�ro sous forme the String
 	 */
-	public static String obtenirNouveauNumeroCriminel() {
+	/*public static String obtenirNouveauNumeroCriminel() {
 		String numero = obtenirNouveauNumeroAlea();
 		instance.numeroCriminel.add(numero);
 		return numero;
@@ -150,7 +150,7 @@ public class GestionnaireScenario {
 	 * apr�s l'avoir ajout� � la liste des num�ros standards
 	 * @return le num�ro sous forme the String
 	 */
-	public static String obtenirNouveauNumeroStandard() {
+	/*public static String obtenirNouveauNumeroStandard() {
 		String numero = obtenirNouveauNumeroAlea();
 		instance.numeroStandard.add(numero);
 		return numero;
@@ -161,7 +161,7 @@ public class GestionnaireScenario {
 	 * avec un pr�fix constant, tel que PPP-XXX-YYYY
 	 * @return le num�ro sous forme the String
 	 */
-	private static String obtenirNouveauNumeroAlea() {
+	/*private static String obtenirNouveauNumeroAlea() {
 		
 		String numero = PREFIX;
 		for(int i=0;i<3;i++) {
@@ -177,4 +177,4 @@ public class GestionnaireScenario {
 		return numero;
 		
 	}
-}
+}*/

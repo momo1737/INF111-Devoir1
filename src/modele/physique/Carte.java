@@ -1,50 +1,31 @@
 package modele.physique;
-
+import java.util.Random;
 public class Carte {
 
-    // Dimensions fixes de la carte
-    public static final double LARGEUR = 1920.0;
-    public static final double HAUTEUR = 1080.0;
+    //la carte est toroïdale (wrap X et Y)
+    private static final Position  TAILLE_MAP = new Position(1920,1080);
+    private static final Random generateur = new Random();
 
-    // --- MÉTHODES ---
+    //méthode pour retourner une position aléatoire
 
-    /**
-     * Donne une position aléatoire dans la carte.
-     * On utilise Math.random() (simple et suffisant pour ce TP).
-     */
-    public static Position positionAleatoire() {
-        double x = Math.random() * LARGEUR; // entre 0 inclus et LARGEUR exclu
-        double y = Math.random() * HAUTEUR; // entre 0 inclus et HAUTEUR exclu
-        return new Position(x, y);
+    public static Position positionAleatoire(){
+        double xAleatoire = generateur.nextDouble() * TAILLE_MAP.getPositionX();
+        double yAleatoire = generateur.nextDouble() * TAILLE_MAP.getPositionY();
+        return new Position(xAleatoire,yAleatoire);
     }
 
-    /**
-     * Ajuste la position p pour qu'elle reste dans la carte (effet "tore"):
-     * - si on sort à gauche, on réapparaît à droite
-     * - si on sort en haut, on réapparaît en bas, etc.
-     * Version simple avec des boucles while et des if.
-     */
-    public static void ajuster(Position p) {
-        double x = p.getPositionX();
-        double y = p.getPositionY();
+    //retourner une nouvelle position si la précedente sort de la map
 
-        // Ramener X dans [0, LARGEUR)
-        while (x < 0) {
-            x += LARGEUR;
-        }
-        while (x >= LARGEUR) {
-            x -= LARGEUR;
-        }
+    public static Position ajusterToroidal(Position autre){
+        double x = autre.getPositionX();
+        double y = autre.getPositionY();
 
-        // Ramener Y dans [0, HAUTEUR)
-        while (y < 0) {
-            y += HAUTEUR;
-        }
-        while (y >= HAUTEUR) {
-            y -= HAUTEUR;
-        }
+        x = x % TAILLE_MAP.getPositionX();
+        if (x<0) {x = x+ TAILLE_MAP.getPositionX();}
 
-        p.setPositionX(x);
-        p.setPositionY(y);
+        y = y % TAILLE_MAP.getPositionY();
+        if (y<0){y = y+ TAILLE_MAP.getPositionY();}
+
+        return new Position(x,y);
     }
 }
