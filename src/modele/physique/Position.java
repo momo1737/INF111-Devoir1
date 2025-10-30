@@ -33,11 +33,10 @@ public class Position {
 
     //méthode de la distance euclidienne
     public double distanceE(Position autre){
-        double Dx = Math.pow(autre.positionX,2) - Math.pow(this.positionX,2);
-        double Dy = Math.pow(autre.positionY,2) - Math.pow(this.positionY,2);
-        double sommeDXY = Dx + Dy;
-        double DE = Math.sqrt(sommeDXY);
-        return DE;
+        double Dx = autre.positionX- this.positionX;
+        double Dy = autre.positionY - this.positionY;
+        double sommeDXY = Math.pow(Dx,2) + Math.pow(Dy,2);
+        return Math.sqrt(sommeDXY);
     }
 
     //toString pour afficher la position
