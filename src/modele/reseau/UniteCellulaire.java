@@ -5,7 +5,7 @@ public interface UniteCellulaire {
     int appeler(String numeroAppele,String numeroAppelant,Antenne antenneConnecte);
     //entier, indiquant le numéro de connexion
 
-    Cellulaire repondre(String numeroAppele,String numeroAppelant,int numeroCellulaire);
+    Cellulaire repondre(String numeroAppele,String numeroAppelant,int numeroConnexion);
     //Cellulaire, référence au cellulaire qui répond
 
     void finAppelLocal(String numeroAppele,int numeroConnexion);

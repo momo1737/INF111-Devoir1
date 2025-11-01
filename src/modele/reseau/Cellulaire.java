@@ -14,9 +14,9 @@ public class Cellulaire extends ObjetMobile implements UniteCellulaire {
 
     //Attribut de la classe
     private String numeroLocal;
-    private int numeroConnexion;
     private String numeroConnecte ;
-    private Antenne antenneConnecter;
+    private int numeroConnexion ;
+    private Antenne antenneConnectee;
     private Random generateur ;
     private final GestionnaireReseau reseau;//une copie de l’instance du gestionnaire réseau (voir: getInstance())
 
@@ -24,12 +24,24 @@ public class Cellulaire extends ObjetMobile implements UniteCellulaire {
     //construteur du Cellulaire
     public Cellulaire (String numeroLocal, Position position,double vitesse,double deviation){
         super(position,vitesse,deviation);
+
+
         this.numeroLocal = numeroLocal;
         this.numeroConnexion = NON_CONNECTE;
         this.numeroConnecte = null;
-        this.antenneConnecter = null;
-        this.generateur = new Random();
+
         this.reseau = GestionnaireReseau.getInstance();
+
+
+        //pour obtenir l'antenne la plus proche, en initialisant l'antenne connecté
+        this.antenneConnectee = reseau.trouverAntenneLaPlusProche(this.getPosition());
+        if (antenneConnectee != null) {
+            antenneConnectee.ajouterCellulaire(this);
+        }
+
+        //générateur
+        this.generateur = new Random();
+
     }
 
     //getters pour le numeroLocal et numeroConnexion
@@ -42,7 +54,7 @@ public class Cellulaire extends ObjetMobile implements UniteCellulaire {
     }
 
     //méthode pour savoir si un Cellulaire est connecté
-    public boolean siConnecte() {
+    public boolean estConnecte() {
         return this.numeroConnexion != NON_CONNECTE;
     }
 

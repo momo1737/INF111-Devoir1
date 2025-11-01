@@ -2,14 +2,12 @@ package modele.reseau;
 
 import modele.physique.ObjetPhysique;
 import modele.physique.Position;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Antenne extends ObjetPhysique implements UniteCellulaire {
     private final GestionnaireReseau reseau;
-    private static final List<Cellulaire> cellulaires = new ArrayList<>();
-
+    private final List<Cellulaire> cellulaires = new ArrayList<>();
 
     //Constructeur de l'antenne
     public Antenne(Position position) {
@@ -20,7 +18,7 @@ public class Antenne extends ObjetPhysique implements UniteCellulaire {
 
     //methode qui permet d'obtenir la distance entre une Cellulaire et une Antenne
     public double distance (Position autre){
-        return this.position.distanceE(autre);
+        return this.position.distance(autre);
     }
 
     //méthode toString pour afficher la position de l'Antenne
@@ -29,6 +27,13 @@ public class Antenne extends ObjetPhysique implements UniteCellulaire {
         return "Antenne{" + position + "}";
     }
 
+    //Méthode 100% chat --pour l'instant a re-vérifier
+
+    // Gestion d’inscription des cellulaires - dans la liste cellulaires de l'antenne(utile pour 3.3.1)
+    public void ajouterCellulaire(Cellulaire c) { cellulaires.add(c); }
+    public void enleverCellulaire(Cellulaire c) { cellulaires.remove(c); }
+    public List<Cellulaire> getCellulaires() { return cellulaires; } // pratique pour 3.3.2 repondre()
+
 
 
 
@@ -36,7 +41,7 @@ public class Antenne extends ObjetPhysique implements UniteCellulaire {
     //appelle des méthodes implementer de l'interface UniteCellulaire
     @Override
     public int appeler(String numeroAppele,String numeroAppelant,Antenne antenneConnecte){
-        return 0;
+        return GestionnaireReseau.CODE_NON_CONNECTE;
     }
     @Override
     public Cellulaire repondre(String numeroAppele,String numeroAppelant,int numeroConnexion){
@@ -54,4 +59,9 @@ public class Antenne extends ObjetPhysique implements UniteCellulaire {
 
     @Override
     public  void recevoir(Message message){}
+
+
+
+
+
 }

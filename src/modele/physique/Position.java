@@ -32,7 +32,7 @@ public class Position {
     }
 
     //méthode de la distance euclidienne
-    public double distanceE(Position autre){
+    public double distance(Position autre){
         double Dx = autre.positionX- this.positionX;
         double Dy = autre.positionY - this.positionY;
         double sommeDXY = Math.pow(Dx,2) + Math.pow(Dy,2);
