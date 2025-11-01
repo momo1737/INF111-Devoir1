@@ -33,13 +33,13 @@ import tda.ListeOrdonne;
 public class GestionnaireReseau extends MonObservable implements Runnable {
 
     // ==================== CONSTANCES (exigées) ====================
-    public static final int    PERIODE_SIMULATION_MS = 100;
+    public static final int    PERIODE_SIMULATION_MS = 250;//modification du nombre de periode de simulation pour que sa soit plus lent et donc visible  (ancien:100-nouveau:250) pour tester l'étape 3.3.1
     public static final double VITESSE               = 10.0;
     public static final double DEVIATION_STANDARD    = 0.05;
-    public static final int    NB_CELLULAIRES        = 30;
-    public static final int    NB_ANTENNES           = 10;
+    public static final int    NB_CELLULAIRES        = 1;//modification du nombre de cellulaire (ancien:30-nouveau:1) pour tester l'étape 3.3.1
+    public static final int    NB_ANTENNES           = 30;//modification du nombre d'antennes (ancien:10-nouveau:30) pour tester l'étape 3.3.1
     public static final int    CODE_NON_CONNECTE     = -1;
-    public static final int    NB_CRIMINELS          = 10;  // ? constante ajouter suite a la suggestion de chat pour pouvoir lancer le jeu
+    public static final int    NB_CRIMINELS          = 10;  // ? constante ajouter suite a la suggestion de chat pour pouvoir lancer le jeu, surement pour une étape future
 
 
 	private boolean mondeEnVie = true;
@@ -129,22 +129,18 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
 		creeCellulaires();
 		this.avertirLesObservers();
 
-        /*
-		while(this.mondeEnVie) {	
-			
+
+		while(this.mondeEnVie) {
 			for(Cellulaire cell : cellulaires) {
 				cell.effectuerTour();
 			}
-			
 			this.avertirLesObservers();
-			
-			
 			try {
 				Thread.sleep(PERIODE_SIMULATION_MS);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}*/
+		}
 	}
 	
 }

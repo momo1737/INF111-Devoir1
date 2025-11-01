@@ -70,7 +70,50 @@ public class Cellulaire extends ObjetMobile implements UniteCellulaire {
     }
 
 
-    //appelle des méthodes implementer de l'interface UniteCellulaire
+    //==========================================PARTIE 3.3.1====================================================
+                               /*cette partie sert uniquement a lire
+                          * et a mettre a jour la référence de l'antenne
+     */
+
+
+    //getter et setter demander
+    public Antenne getAntenneConnectee() { return antenneConnectee; }
+    public void setAntenneConnectee(Antenne a) { this.antenneConnectee = a; }
+
+
+
+
+
+                //========Méthode pour mettre a jours l'antenne==========
+    private void mettreAJourAntenne(){
+        Antenne NvAntenne = reseau.trouverAntenneLaPlusProche(this.getPosition());
+        if (NvAntenne == null){
+            return;
+        }
+        else if (NvAntenne == antenneConnectee){
+            return;
+        }
+        else if (antenneConnectee != null){
+            antenneConnectee.enleverCellulaire(this);
+        }
+        NvAntenne.ajouterCellulaire(this);
+        antenneConnectee = NvAntenne;
+
+        // >>> trace demandée pour la validation <<<------suggestion de chat pour tester comme le prof la demander
+        System.out.println("[SWITCH] " + numeroLocal + " -> " + antenneConnectee);
+    }
+
+
+    //Methode pour faire la mise a jour a chaque tour et en fonction de la position a l'aide de seDeplacer()
+    //la méthode a été mis en protected pour que je puisse l'utiliser et faire le test dans GestioneReseau pour 3.3.1
+    protected void effectuerTour(){
+        this.seDeplacer();
+        mettreAJourAntenne();
+    }
+
+
+
+    //===================================appelle des méthodes implementer de l'interface UniteCellulaire===============================================================
     @Override
     public int appeler(String numeroAppele,String numeroAppelant,Antenne antenneConnecte){
         return NON_CONNECTE;
