@@ -27,6 +27,7 @@ public class Antenne extends ObjetPhysique implements UniteCellulaire {
         return "Antenne{" + position + "}";
     }
 
+    //===========================================================================================================
     //Méthode 100% chat --pour l'instant a re-vérifier
 
     // Gestion d’inscription des cellulaires - dans la liste cellulaires de l'antenne(utile pour 3.3.1)
@@ -34,6 +35,7 @@ public class Antenne extends ObjetPhysique implements UniteCellulaire {
     public void enleverCellulaire(Cellulaire c) { cellulaires.remove(c); }
     public List<Cellulaire> getCellulaires() { return cellulaires; } // pratique pour 3.3.2 repondre()
 
+    //===========================================================================================================
 
 
 
@@ -41,11 +43,24 @@ public class Antenne extends ObjetPhysique implements UniteCellulaire {
     //appelle des méthodes implementer de l'interface UniteCellulaire
     @Override
     public int appeler(String numeroAppele,String numeroAppelant,Antenne antenneConnecte){
-        return GestionnaireReseau.CODE_NON_CONNECTE;
+        return GestionnaireReseau.relayerAppel(numeroAppele,numeroAppelant,antenneConnecte);
     }
+
     @Override
     public Cellulaire repondre(String numeroAppele,String numeroAppelant,int numeroConnexion){
+        int nbCellulaire=cellulaires.size();
+
+        //on parcours les cellulaires enregistre a lantenne
+        for (int i=0;i<nbCellulaire;i++){
+            Cellulaire cellulairePotentiel =cellulaires.get(i);
+
+            //On compare avec la methode compareNumero si cellulaire potentiel correspond alors on utilise methode repondre sinon retourne nul
+            if(cellulairePotentiel.comparerNumero(numeroAppele)){
+                return cellulairePotentiel.repondre(numeroAppele,numeroAppelant,numeroConnexion);}
+        }
         return null;
+
+
     }
 
     @Override

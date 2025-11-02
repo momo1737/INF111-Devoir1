@@ -19,33 +19,28 @@ public class Cellulaire extends ObjetMobile implements UniteCellulaire {
     private Antenne antenneConnectee;
     private Random generateur ;
     private final GestionnaireReseau reseau;//une copie de l’instance du gestionnaire réseau (voir: getInstance())
+    private String numeroAppelant;
 
 
     //construteur du Cellulaire
     public Cellulaire (String numeroLocal, Position position,double vitesse,double deviation){
         super(position,vitesse,deviation);
-
-
         this.numeroLocal = numeroLocal;
         this.numeroConnexion = NON_CONNECTE;
         this.numeroConnecte = null;
-
         this.reseau = GestionnaireReseau.getInstance();
-
 
         //pour obtenir l'antenne la plus proche, en initialisant l'antenne connecté
         this.antenneConnectee = reseau.trouverAntenneLaPlusProche(this.getPosition());
         if (antenneConnectee != null) {
             antenneConnectee.ajouterCellulaire(this);
         }
-
         //générateur
         this.generateur = new Random();
 
     }
 
     //getters pour le numeroLocal et numeroConnexion
-
     public String getNumeroLocal(){
         return numeroLocal;
     }
@@ -74,15 +69,9 @@ public class Cellulaire extends ObjetMobile implements UniteCellulaire {
                                /*cette partie sert uniquement a lire
                           * et a mettre a jour la référence de l'antenne
      */
-
-
     //getter et setter demander
     public Antenne getAntenneConnectee() { return antenneConnectee; }
     public void setAntenneConnectee(Antenne a) { this.antenneConnectee = a; }
-
-
-
-
 
                 //========Méthode pour mettre a jours l'antenne==========
     private void mettreAJourAntenne(){
@@ -110,16 +99,27 @@ public class Cellulaire extends ObjetMobile implements UniteCellulaire {
         this.seDeplacer();
         mettreAJourAntenne();
     }
+    //==================================================================================================
+
 
 
 
     //===================================appelle des méthodes implementer de l'interface UniteCellulaire===============================================================
+    // (1) le cellulaire appel la méthode Antenne.appeler() appartenant à son antenne connecté
     @Override
     public int appeler(String numeroAppele,String numeroAppelant,Antenne antenneConnecte){
-        return NON_CONNECTE;
+        return antenneConnectee.appeler(numeroAppele,numeroAppelant,antenneConnecte);
     }
+    //Remplir methode cellulaire repondre (5b) JE NE SUIS PAS SUR
     @Override
     public Cellulaire repondre(String numeroAppele,String numeroAppelant,int numeroConnexion){
+        //Si cellulaire ne retourne pas quil est connecte
+        if(!this.estConnecte()){
+            //On enregistre les infos du cellulaire this (numConnexion et num Appelant)
+            this.numeroConnexion = numeroConnexion;
+            this.numeroAppelant=numeroAppelant;
+            return this;}
+        //Sinon retourne nul
         return null;
     }
 

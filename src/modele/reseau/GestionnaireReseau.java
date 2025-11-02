@@ -44,7 +44,17 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
 
 	private boolean mondeEnVie = true;
 	private static GestionnaireReseau instance = new GestionnaireReseau();
+    //On creer cet attribut pour pouvoir generer un numero de connexion unique pour chaque appel
+    private static  int prochainNumConnexion=0;
+    //On va stocker le nombre dantenne creer dans une liste pour utiliser dans notre methode
+    private static List<Antenne> antennes = new ArrayList<>();
+    //On va creer une liste pour stocker les connexions a partir de listeOrdonnee
+    private static ListeOrdonne connexions=new ListeOrdonne(50);
+    private final Random generateur = new Random();
+    private static final List<Cellulaire> cellulaires = new ArrayList<>();
 
+
+    //private final ListeOrdonne<Connexion> connexions = new ListeOrdonne<>();   ancien attribut du prof
 	/**
 	 * méthode permettant d'obtenir une référence sur le Gestionnaire Réseau
 	 * @return instance
@@ -64,14 +74,6 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
 		this.mondeEnVie = false;
 	}
 
-    // ==================== ATTRIBUTS (exigés) ====================
-    private final Random rand = new Random();
-    private final List<Antenne> antennes = new ArrayList<>();
-    private final List<Cellulaire> cellulaires = new ArrayList<>();
-    private final List<Connexion> connexions = new ArrayList<>();//attribut temporaire puisque le TDA n'est pas encore prêt
-
-    //
-    //private final ListeOrdonne<Connexion> connexions = new ListeOrdonne<>();
 
 
     private void creeAntennes() {
@@ -118,6 +120,47 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
         }
         return laPlusProche;
     }
+
+    //Methode pour generer un numero de connexion unique
+    public static int numConnexionUnique(){
+        return prochainNumConnexion++;}
+
+    //Creation de la méthode GestionnaireReseau::relayerAppel- 3.3.2 - Étape 2
+    //je ne suis pas sur
+    public static int relayerAppel(String numeroAppele,String numeroAppelant,Antenne antenneDeBase) {
+
+        //On va gener un numero de connexion unique avec la methode creer plus haut (numConnexionUnique)
+        int numConnexion = numConnexionUnique();
+
+        //On va creer des variables vides pour stocker
+        Cellulaire destinaire = null;
+        Antenne antenneDestination = null;
+
+        //(3) on va parcourir toutes les antennes avec la methode
+        int nbAntenne = antennes.size();
+        for (int i = 0; i < nbAntenne; i++) {
+            Antenne antenneCourante = antennes.get(i);
+
+            //On demande a lantenne si elle a le cellulaire qui est cense repondre
+            Cellulaire cellulaireQuiRepond = antenneCourante.repondre(numeroAppele, numeroAppelant, numConnexion);
+
+            //reference valide donc non null alors ok(5)
+            if (cellulaireQuiRepond != null) {destinaire = cellulaireQuiRepond;antenneDestination = antenneCourante;}
+
+            //Si antenne renvoie une valeur alors indique que antenne a repondu donc antenne reference valide
+            if (antenneCourante != null) {
+
+                //on creer une connexion a partir des infos valides quon a et on lajoute a la liste(4)
+                Connexion connexionCreer = new Connexion(numConnexion, antenneDeBase, antenneCourante);
+                connexions.inserer(connexionCreer);
+                return numConnexion;}
+        }
+        return Cellulaire.NON_CONNECTE;
+
+
+    }
+
+
 	/**
 	 * s'exécute en continue pour simuler le système
 	 */
