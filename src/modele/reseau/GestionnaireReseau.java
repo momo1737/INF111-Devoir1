@@ -71,7 +71,7 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
     private final List<Connexion> connexions = new ArrayList<>();//attribut temporaire puisque le TDA n'est pas encore prêt
 
     //
-    // private final ListeOrdonne<Connexion> connexions = new ListeOrdonne<>();
+    //private final ListeOrdonne<Connexion> connexions = new ListeOrdonne<>();
 
 
     private void creeAntennes() {
@@ -89,8 +89,8 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
             Position p = Carte.positionAleatoire();
             Cellulaire c = new Cellulaire(numero, p, VITESSE, DEVIATION_STANDARD);
             cellulaires.add(c);
-            // Si ton constructeur Cellulaire init l?antenne la plus proche, rien à faire ici.
-            // Sinon, tu pourras rattacher ici lors de l?étape 3.3.1.
+            // Si ton constructeur Cellulaire init l'antenne la plus proche, rien à faire ici.
+            // Sinon, tu pourras rattacher ici lors de l'étape 3.3.1.
         }
     }
 
@@ -107,16 +107,16 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
 
     // ==================== Utile dès 3.3.1 ====================
     public Antenne trouverAntenneLaPlusProche(Position p) {
-        Antenne best = null;
+        Antenne laPlusProche = null;
         double dmin = Double.POSITIVE_INFINITY;
         for (Antenne a : antennes) {
             double d = a.distance(p);
             if (d < dmin) {
                 dmin = d;
-                best = a;
+                laPlusProche = a;
             }
         }
-        return best;
+        return laPlusProche;
     }
 	/**
 	 * s'exécute en continue pour simuler le système
@@ -129,7 +129,7 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
 		creeCellulaires();
 		this.avertirLesObservers();
 
-
+//j'ai décocher cette section pour pouvoir faire le test pour le 3.3.1
 		while(this.mondeEnVie) {
 			for(Cellulaire cell : cellulaires) {
 				cell.effectuerTour();

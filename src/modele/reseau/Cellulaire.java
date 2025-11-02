@@ -55,7 +55,7 @@ public class Cellulaire extends ObjetMobile implements UniteCellulaire {
 
     //méthode pour savoir si un Cellulaire est connecté
     public boolean estConnecte() {
-        return this.numeroConnexion != NON_CONNECTE;
+        return this.numeroConnexion != NON_CONNECTE;//(-1)
     }
 
     //méthode pour comparer le numero reçu avec le numero local
