@@ -36,8 +36,15 @@ public class Connexion {
         //Verification si lobjet est bien une connexion et comparer
         if (!(obj instanceof Connexion)) return false;
         Connexion autre = (Connexion) obj;
-        return this.numConnexion == autre.numConnexion;}
-
-
-
+        return this.numConnexion == autre.numConnexion;
+    }
+    //Mettre Ã jour une antenne
+    public void miseAJourAntenne(Antenne ancienne, Antenne nouvelle) {
+        if (tableauAntenne[0] == ancienne) {
+            tableauAntenne[0] = nouvelle;
+        }
+        else if (tableauAntenne[1] == ancienne) {
+            tableauAntenne[1] = nouvelle;
+        }
+    }
 }

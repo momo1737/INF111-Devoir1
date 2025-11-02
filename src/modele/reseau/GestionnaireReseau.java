@@ -15,19 +15,18 @@ package modele.reseau;
 
 
 
-import observer.MonObservable;
 
-//===========Ajouts pour les TDA
+//===========Ajouts pour les TDA=================
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
+import tda.ListeOrdonne;
 
-//==========Ajouts des classes
-import modele.reseau.Connexion;
+//==========Ajouts des classes===================
 import modele.gestionnaires.GestionnaireScenario;
 import modele.physique.Carte;
 import modele.physique.Position;
-import tda.ListeOrdonne;
+import observer.MonObservable;
 
 
 public class GestionnaireReseau extends MonObservable implements Runnable {
@@ -36,12 +35,12 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
     public static final int    PERIODE_SIMULATION_MS = 250;//modification du nombre de periode de simulation pour que sa soit plus lent et donc visible  (ancien:100-nouveau:250) pour tester l'étape 3.3.1
     public static final double VITESSE               = 10.0;
     public static final double DEVIATION_STANDARD    = 0.05;
-    public static final int    NB_CELLULAIRES        = 1;//modification du nombre de cellulaire (ancien:30-nouveau:1) pour tester l'étape 3.3.1
-    public static final int    NB_ANTENNES           = 30;//modification du nombre d'antennes (ancien:10-nouveau:30) pour tester l'étape 3.3.1
+    public static final int    NB_CELLULAIRES        = 2;//modification du nombre de cellulaire (ancien:30-nouveau:1) pour tester l'étape 3.3.1
+    public static final int    NB_ANTENNES           = 3;//modification du nombre d'antennes (ancien:10-nouveau:30) pour tester l'étape 3.3.1
     public static final int    CODE_NON_CONNECTE     = -1;
     public static final int    NB_CRIMINELS          = 10;  // ? constante ajouter suite a la suggestion de chat pour pouvoir lancer le jeu, surement pour une étape future
 
-
+    // ==================== ATTRIBUTS (exigées) ====================
 	private boolean mondeEnVie = true;
 	private static GestionnaireReseau instance = new GestionnaireReseau();
     //On creer cet attribut pour pouvoir generer un numero de connexion unique pour chaque appel
@@ -53,17 +52,25 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
     private final Random generateur = new Random();
     private static final List<Cellulaire> cellulaires = new ArrayList<>();
 
-
     //private final ListeOrdonne<Connexion> connexions = new ListeOrdonne<>();   ancien attribut du prof
+
+
 	/**
 	 * méthode permettant d'obtenir une référence sur le Gestionnaire Réseau
 	 * @return instance
 	 */
+
 	public static GestionnaireReseau getInstance() {
 		return instance;
 	}
-	
-	private GestionnaireReseau() {}
+
+
+   //=====================CONSTRUCTEUR=======================================================
+	private GestionnaireReseau() {
+        /*le constructeur reste vide, puisque nous avons déjà attribut les valeurs
+        des attributs dans l'implémentation de ceux-ci
+        */
+    }
 
 	/**
 	 * permet de mettre fin à la simulation
@@ -75,7 +82,7 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
 	}
 
 
-
+//=============================création d'antenne et de cellulaires===========================
     private void creeAntennes() {
         antennes.clear();
         for (int i = 0; i < NB_ANTENNES; i++) {
@@ -88,16 +95,16 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
         cellulaires.clear();
         for (int i = 0; i < NB_CELLULAIRES; i++) {
             String numero = GestionnaireScenario.obtenirNouveauNumeroStandard();
-            Position p = Carte.positionAleatoire();
-            Cellulaire c = new Cellulaire(numero, p, VITESSE, DEVIATION_STANDARD);
-            cellulaires.add(c);
+            Position position = Carte.positionAleatoire();
+            Cellulaire cellulaire = new Cellulaire(numero, position, VITESSE, DEVIATION_STANDARD);
+            cellulaires.add(cellulaire);
             // Si ton constructeur Cellulaire init l'antenne la plus proche, rien à faire ici.
             // Sinon, tu pourras rattacher ici lors de l'étape 3.3.1.
         }
     }
 
 
-    // ==================== SERVICES (exigés) ====================
+    // ==================== SERVICES  ====================
     public List<Antenne> getAntennes() {
         return antennes; // retourne la référence (pas de copie)
     }
@@ -107,10 +114,13 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
     }
 
 
-    // ==================== Utile dès 3.3.1 ====================
+    // ==================== Utile pour l'étape 3.3.1 ====================
     public Antenne trouverAntenneLaPlusProche(Position p) {
         Antenne laPlusProche = null;
         double dmin = Double.POSITIVE_INFINITY;
+
+        //================revoir la variable "POSITIVE_INFINITY"======================
+
         for (Antenne a : antennes) {
             double d = a.distance(p);
             if (d < dmin) {
@@ -121,6 +131,7 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
         return laPlusProche;
     }
 
+//====================================Walid================================
     //Methode pour generer un numero de connexion unique
     public static int numConnexionUnique(){
         return prochainNumConnexion++;}
@@ -159,9 +170,22 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
 
 
     }
+//==============================Raytoch=============================
+    // Récupérer une connexion par son numéro (via ListeOrdonne)
+    private Connexion getConnexion(int numeroConnexion) {
+        return connexions.rechercher(numeroConnexion);
+    }
+
+    //Mettre a jour la connexion
+    public void mettreAJourConnexion(int numeroConnexion, Antenne ancienne, Antenne nouvelle) {
+        Connexion connect = getConnexion(numeroConnexion);
+        if (connect != null) {
+            connect.miseAJourAntenne(ancienne, nouvelle);
+        }
+    }
 
 
-	/**
+    /**
 	 * s'exécute en continue pour simuler le système
 	 */
 	@Override

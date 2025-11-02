@@ -37,6 +37,12 @@ public class Antenne extends ObjetPhysique implements UniteCellulaire {
 
     //===========================================================================================================
 
+    //Raytoch---------------
+
+    //Mise à jour connexion (avec this)
+    public void mettreAJourConnexion(int numeroConnexion, Antenne ancienne) {
+        GestionnaireReseau.getInstance().mettreAJourConnexion(numeroConnexion, ancienne, this);
+    }
 
 
 
