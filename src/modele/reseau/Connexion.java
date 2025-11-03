@@ -22,6 +22,17 @@ public class Connexion {
         this.tableauAntenne[1] = antenneDeux;
     }
 
+    //=======PARTIE RAYANE EL AHMADI======//
+    //on doit comprendre le but de cette méthode !!!
+
+    public Antenne getAutreAntenne(Antenne a){
+        if (a == null) return null;
+        if(tableauAntenne[0] == a) return tableauAntenne[1];
+        if(tableauAntenne[1] == a) return tableauAntenne[0];
+        return null;
+    }
+
+
     //Passons aux services
 
     //getter

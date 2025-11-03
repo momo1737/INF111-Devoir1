@@ -36,7 +36,7 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
     public static final double VITESSE               = 10.0;
     public static final double DEVIATION_STANDARD    = 0.05;
     public static final int    NB_CELLULAIRES        = 2;//modification du nombre de cellulaire (ancien:30-nouveau:1) pour tester l'étape 3.3.1
-    public static final int    NB_ANTENNES           = 3;//modification du nombre d'antennes (ancien:10-nouveau:30) pour tester l'étape 3.3.1
+    public static final int    NB_ANTENNES           = 30;//modification du nombre d'antennes (ancien:10-nouveau:30) pour tester l'étape 3.3.1
     public static final int    CODE_NON_CONNECTE     = -1;
     public static final int    NB_CRIMINELS          = 10;  // ? constante ajouter suite a la suggestion de chat pour pouvoir lancer le jeu, surement pour une étape future
 
@@ -117,7 +117,7 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
     // ==================== Utile pour l'étape 3.3.1 ====================
     public Antenne trouverAntenneLaPlusProche(Position p) {
         Antenne laPlusProche = null;
-        double dmin = Double.POSITIVE_INFINITY;
+        double dmin = Double.POSITIVE_INFINITY; //a revoir le POSITIVE_INFINITY
 
         //================revoir la variable "POSITIVE_INFINITY"======================
 
@@ -134,7 +134,7 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
 //====================================Walid================================
     //Methode pour generer un numero de connexion unique
     public static int numConnexionUnique(){
-        return prochainNumConnexion++;}
+        return prochainNumConnexion++;} //a revoir le prochainNumConnexion
 
     //Creation de la méthode GestionnaireReseau::relayerAppel- 3.3.2 - Étape 2
     //je ne suis pas sur
@@ -182,6 +182,30 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
         if (connect != null) {
             connect.miseAJourAntenne(ancienne, nouvelle);
         }
+    }
+
+    //=========================PARTIE RAYANE EL AHMADI==================================//
+
+    public boolean relayerMessage(Antenne source, Message message, int numCo) {
+        if (source == null || message == null) return false;
+
+        Connexion co = trouverConnexion(numCo);
+        if (co == null) return false;
+
+        Antenne destination = co.getAutreAntenne(source);
+        if (destination == null) return false;
+
+        destination.recevoir(message);
+        return true;
+    }
+
+//revoir le nom des variables pour que sa concorde avec tout le reste du projet
+    // Recherche dans la liste de connexion
+    private Connexion trouverConnexion(int numCo) {
+        for (Connexion c : connexions) {
+            if (c.getNumConnexion() == numCo) return c;
+        }
+        return null;
     }
 
 

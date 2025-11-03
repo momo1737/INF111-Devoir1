@@ -76,13 +76,23 @@ public class Antenne extends ObjetPhysique implements UniteCellulaire {
     public void finAppelDistant(String numeroAppele,int numeroConnexion){}
 
     @Override
-    public void envoyer(Message message,int numeroConnexion){}
-
+    public boolean envoyer(Message message, int numeroConnexion) {
+        return reseau.relayerMessage(this, message, numeroConnexion);
+    }
+    /*problème identique a la methode envoyer message de la classe Cellulaires
+      entre le boolean et la valeur retourner
+    */
     @Override
-    public  void recevoir(Message message){}
+    public void recevoir(Message message) {
+
+        String autrePersonne = message.getNumeroDestination();
+        Cellulaire destination = trouverCellulaire(autrePersonne);
+        if (destination != null) {
+            destination.recevoir(message);
 
 
+            // PARTIE RAYANE EL AHMADI//
 
-
-
+        }
+    }
 }

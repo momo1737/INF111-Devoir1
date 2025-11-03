@@ -100,7 +100,11 @@ public class Cellulaire extends ObjetMobile implements UniteCellulaire {
         mettreAJourAntenne();
     }
     //==================================================================================================
-
+// PARTIE DE RAYANE EL AHMADI////////
+/* concernant la parti de teinté sur le fait de mettre a jour l'antenne a chaque tour,
+je ne l'est pas mis puisque on avait déja ce bout de code du coup aucune utilité
+vérifier avec l'équipe
+*/
 
 
 
@@ -129,10 +133,24 @@ public class Cellulaire extends ObjetMobile implements UniteCellulaire {
     @Override
     public void finAppelDistant(String numeroAppele,int numeroConnexion){}
 
+    // PARTIE DE RAYANE EL AHMADI////////
     @Override
-    public void envoyer(Message message,int numeroConnexion){}
+    public boolean envoyer(Message message, int numeroConnexion) {
+        if (!estConnecte()) return false;
+        if (this.numeroConnexion != numeroConnexion) return false;
+        if (antenneConnectee == null) return false;
 
+        return antenneConnectee.envoyer(message, numeroConnexion);
+        /*
+        erreur puisque la méthode est censé retourner un boolean
+        et non des variable de message(message, numeroConnexion),
+        donc il faut revoir sa avec rayane et le changer
+        */
+    }
     @Override
-   public  void recevoir(Message message){}
+    public void recevoir (Message message){
+        System.out.println("Numero local est:" +numeroLocal + "et le message est: " +message);
+    }
+
 
 }
