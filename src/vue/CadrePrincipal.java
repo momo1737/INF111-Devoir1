@@ -1,8 +1,8 @@
 package vue;
 /**
- * Cadre simple, plein écran qui contient un panneau dessin.
- * 
- * Intègre la logique de confirmation de fermeture de fenêtre
+ * Cadre simple, plein ?cran qui contient un panneau dessin.
+ *
+ * Int?gre la logique de confirmation de fermeture de fen?tre
  */
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -14,58 +14,58 @@ import javax.swing.JOptionPane;
 
 public class CadrePrincipal extends JFrame implements Runnable{
 
-	PanneauPrincipal panneauPrincipal;
-	Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
-	
-	@Override
-	public void run() {
-		
-		initCadre();
-		initPanneau();
+    PanneauPrincipal panneauPrincipal;
+    Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
 
-    	setVisible(true);
-	}
-	
-	
-	private void initCadre() {
+    @Override
+    public void run() {
 
-    	// maximize la fenÃªtre
-    	setExtendedState(JFrame.MAXIMIZED_BOTH);
-    	
-    	
-    	// ajoute une gestion du EXIT par confirmation pop-up
-		this.addWindowListener(new WindowAdapter() {
-		      
-			// gestionnaire d'Ã©vÃ©nement pour la fermeture
-			public void windowClosing(WindowEvent we) {
-				
-				// ajoute une demande de confirmation
-		        int result = JOptionPane.showConfirmDialog(null,
-		            "Voulez-vous quitter?", "Confirmation de sortie: ",
-		            JOptionPane.YES_NO_OPTION);
-		        
-		        // si la rÃ©ponse est oui
-		        if (result == JOptionPane.YES_OPTION){
-		        	// ferme la fenÃªtre en activant la gestion de l'Ã©vÃ©nement
-		        	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		        }
-		        else if (result == JOptionPane.NO_OPTION){
-		        	// sinon, dÃ©sactive la gestion de l'Ã©vÃ©nement
-		        	setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		        }
-		      }
-		});
-		
-	}
+        initCadre();
+        initPanneau();
 
-	private void initPanneau() {
+        setVisible(true);
+    }
+
+
+    private void initCadre() {
+
+        // maximize la fenêtre
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+
+        // ajoute une gestion du EXIT par confirmation pop-up
+        this.addWindowListener(new WindowAdapter() {
+
+            // gestionnaire d'événement pour la fermeture
+            public void windowClosing(WindowEvent we) {
+
+                // ajoute une demande de confirmation
+                int result = JOptionPane.showConfirmDialog(null,
+                        "Voulez-vous quitter?", "Confirmation de sortie: ",
+                        JOptionPane.YES_NO_OPTION);
+
+                // si la réponse est oui
+                if (result == JOptionPane.YES_OPTION){
+                    // ferme la fenêtre en activant la gestion de l'événement
+                    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                }
+                else if (result == JOptionPane.NO_OPTION){
+                    // sinon, désactive la gestion de l'événement
+                    setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                }
+            }
+        });
+
+    }
+
+    private void initPanneau() {
 
         // instancie notre panneau principal
-		panneauPrincipal = new PanneauPrincipal(tailleEcran);
-        
+        panneauPrincipal = new PanneauPrincipal(tailleEcran);
+
         // cette ligne remplace le JPanel existant dans le JFrame
-        // par notre classe dÃ©finis
-		this.setContentPane(panneauPrincipal);
-	}
+        // par notre classe définis
+        this.setContentPane(panneauPrincipal);
+    }
 
 }

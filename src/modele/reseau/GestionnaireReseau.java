@@ -1,52 +1,173 @@
 package modele.reseau;
 
 /**
- * Le gestionnaire réseau est responsable de gérer les connexions cellulaires et de relayer
+ * Le gestionnaire rï¿½seau est responsable de gï¿½rer les connexions cellulaires et de relayer
  * les appels, messages et fin d'appel.
- * 
- * Dans le cadre de la simulation, c'est également le gestionnaire réseau qui instancie Antennes et
- * cellulaire et qui gère l'exécution par tour des cellulaires.
- * 
- * Le gestionnaire réseau est un singleton
- * 
+ *
+ * Dans le cadre de la simulation, c'est ï¿½galement le gestionnaire rï¿½seau qui instancie Antennes et
+ * cellulaire et qui gï¿½re l'exï¿½cution par tour des cellulaires.
+ *
+ * Le gestionnaire rï¿½seau est un singleton
+ *
  * @author Fred Simard
  * @version Hiver 2021
  */
 
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import observer.MonObservable;
+import tda.ListeOrdonne;
+import modele.physique.Carte;
+import modele.physique.Position;
+import modele.gestionnaires.GestionnaireScenario;
 
 public class GestionnaireReseau extends MonObservable implements Runnable {
 
-	private boolean mondeEnVie = true;
-	private static GestionnaireReseau instance = new GestionnaireReseau();
+    private boolean mondeEnVie = true;
+    private static GestionnaireReseau instance = new GestionnaireReseau();
 
-	/**
-	 * méthode permettant d'obtenir une référence sur le Gestionnaire Réseau
-	 * @return instance
-	 */
-	public static GestionnaireReseau getInstance() {
-		return instance;
-	}
-	
-	private GestionnaireReseau() {}
+    //Constantes
 
-	/**
-	 * permet de mettre fin à la simulation
-	 * @param mondeEnVie
-	 */
-	public void finDeSimulation() {
-		this.mondeEnVie = false;
-	}
+    public static final int PERIODE_SIMULATION_MS = 100;
+    public static final double VITESSE = 10.0;
+    public static final double DEVIATION_STANDARD = 0.05;
+    public static final int NB_CELLULAIRES = 30;
+    public static final int NB_ANTENNES = 5;
+    public static final int CODE_NON_CONNECTE = -1;
+    public static final int NB_CRIMINELS  = 5;
+
+    //Attributs
+
+    private Random generateur;
+    private List<Antenne> antennes;
+    private List<Cellulaire> cellulaires;
+    private ListeOrdonne connexions;
 
 
-	/**
-	 * s'exécute en continue pour simuler le système
-	 */
-	@Override
-	public void run() {
+    //Methodes privÃ©es
+
+    /**
+     * mï¿½thode permettant d'obtenir une rï¿½fï¿½rence sur le Gestionnaire Rï¿½seau
+     * @return instance
+     */
+    public static GestionnaireReseau getInstance() {
+        return instance;
+    }
+
+    private GestionnaireReseau() {
+        this.generateur = new Random();
+        this.antennes = new ArrayList<>();
+        this.cellulaires = new ArrayList<>();
+        this.connexions = new tda.ListeOrdonne(500);
+    }
+
+    // CrÃ©e des antennes Ã  des positions alÃ©atoires
+    private void creeAntennes() {
+        //vider la liste
+        antennes.clear();
+        for (int i = 0; i < NB_ANTENNES; i++) {
+            Position position = Carte.positionAleatoire();
+            antennes.add(new Antenne(position));
+        }
+    }
+
+    //CrÃ©er des cellulaires
+
+    private void creeCellulaires(){
+        //vider la liste
+        cellulaires.clear();
+        for (int i = 0; i <NB_CELLULAIRES; i++){
+            //Obtenir un numero aleatoire
+            String num = GestionnaireScenario.obtenirNouveauNumeroStandard();
+
+            //Position alÃ©atoire sur la carte
+            Position position = Carte.positionAleatoire();
+
+            //CrÃ©er le cellulaire
+            Cellulaire cellulaire = new Cellulaire(num, position, VITESSE, DEVIATION_STANDARD);
+
+            cellulaires.add(cellulaire);
+        }
+
+    }
+
+    public Antenne trouverAntenneLaPlusProche(Position p) {
+        Antenne best = null;
+        double dmin = Double.POSITIVE_INFINITY;
+        for (Antenne a : antennes) {
+            double d = a.distance(p);
+            if (d < dmin) {
+                dmin = d;
+                best = a;
+            }
+        }
+        return best;
+    }
+    // Services
+    public List<Antenne> getAntennes() {return antennes;}
+    public List<Cellulaire> getCellulaires() {return cellulaires;}
+
+    // RÃ©cupÃ©rer une connexion par son numÃ©ro (via ListeOrdonne)
+    private Connexion getConnexion(int numeroConnexion) {
+        return connexions.rechercher(numeroConnexion);
+    }
+
+    //Mettre a jour la connexion
+    public void mettreAJourConnexion(int numeroConnexion, Antenne ancienne, Antenne nouvelle) {
+        Connexion connect = getConnexion(numeroConnexion);
+        if (connect != null) {
+            connect.miseAJourAntenne(ancienne, nouvelle);
+        }
+    }
+
+    //Supprime l'objet "connexion" des connexions
+
+    private void supprimerConnexion(int numeroConnexion) {
+        Connexion c = getConnexion(numeroConnexion);
+        if (c != null) {
+            connexions.supprimer(c.getNumConnexion());
+        }
+    }
+
+    // Relayer la fin de l'Appel (l'antenne source sait qu'on a raccrocher)
+    public void relayerFinAppel(int numeroConnexion, Antenne source, String numeroAppele) {
+
+
+        Connexion connexion = getConnexion(numeroConnexion);
+        if (connexion == null) {
+            return;
+        }
+
+        //  Prendre l'Autre antenne
+        Antenne autre = connexion.getAutreAntenne(source);
+        if (autre != null) {
+
+            // Notifie lâ€™autre cÃ´tÃ© (le cellulaire destinataire) via son antenne
+            autre.finAppelDistant(numeroAppele, numeroConnexion);
+        }
+
+        // Enleve la connexion
+
+        supprimerConnexion(numeroConnexion);
+    }
+
+    /**
+     * permet de mettre fin ï¿½ la simulation
+     * @param mondeEnVie
+     */
+    public void finDeSimulation() {
+        this.mondeEnVie = false;
+    }
+
+
+    /**
+     * s'exï¿½cute en continue pour simuler le systï¿½me
+     */
+    @Override
+    public void run() {
 		
-		/*
+
 		creeAntennes();
 		creeCellulaires();
 		this.avertirLesObservers();
@@ -65,7 +186,10 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}*/
-	}
-	
+		}
+    }
+
+
+
+
 }

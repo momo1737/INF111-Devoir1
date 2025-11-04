@@ -9,9 +9,9 @@ public class ProgrammePrincipal {
 
     	Thread t2 = new Thread(GestionnaireReseau.getInstance());
     	t2.start();
-		
+
     	Thread t = new Thread(new CadrePrincipal());
     	t.start();
-    	
+
 	}
 }
