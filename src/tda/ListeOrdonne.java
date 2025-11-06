@@ -2,29 +2,30 @@ package tda;
 
 import modele.reseau.Connexion;
 
+import javax.sql.ConnectionPoolDataSource;
+
 public class ListeOrdonne {
-    private final Connexion[] data;
+    private final Connexion[] donnee;
     private int n = 0;
 
     //constructeur
 
     public ListeOrdonne(int capacite) {
-        data = new Connexion[capacite];
+        donnee = new Connexion[capacite];
     }
 
-    /* recherche binaire par numero
-    g = gauche, d = droite, m = milieu
-    */
+    public  Connexion[] getDonnee(){return this.donnee;}
+    // recherche binaire par numero
 
     public Connexion rechercher(int numero) {
-        int g = 0, d = n - 1;
-        while (g <= d) {
-            int m = (g + d) / 2;
-            int numM = data[m].getNumConnexion();
+        int gauche = 0, droite = n - 1;
+        while (gauche <= droite) {
+            int centre = (gauche + droite) / 2;
+            int numeroCentre = donnee[centre].getNumConnexion();
 
-            if (numM == numero) return data[m];
-            if (numM < numero) g = m + 1;
-            else d = m -1;
+            if (numeroCentre == numero) return donnee[centre];
+            if (numeroCentre < numero) gauche = centre + 1;
+            else droite = centre -1;
         }
         return null;
     }
@@ -32,7 +33,7 @@ public class ListeOrdonne {
 
     public boolean inserer(Connexion connexion) {
         if (connexion == null) return false;
-        if (n == data.length) return false;
+        if (n == donnee.length) return false;
 
         int numConnexion = connexion.getNumConnexion();
 
@@ -41,17 +42,17 @@ public class ListeOrdonne {
 
         //Trouver la position ou inserer
         int index = 0;
-        while (index <n && data[index].getNumConnexion() < numConnexion) {
+        while (index <n && donnee[index].getNumConnexion() < numConnexion) {
             index ++;
         }
 
         // Décaler à droite
         for (int i = n; i > index; i--) {
-            data[i] = data[i - 1];
+            donnee[i] = donnee[i - 1];
         }
 
         //Inserer
-        data[index] = connexion;
+        donnee[index] = connexion;
         n++;
         return true;
     }

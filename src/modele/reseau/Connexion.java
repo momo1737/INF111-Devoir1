@@ -11,19 +11,18 @@ public class Connexion {
     private Antenne [] tableauAntenne = new Antenne[NB_ANTENNES];
 
     //Constructeur par parametre
-    public Connexion(int numConnexion,Antenne antenne,Antenne antenneDeux) {
+    public Connexion(int numConnexion,Antenne antenneSource,Antenne antenneDestination) {
 
         this.numConnexion = numConnexion;
 
         //valeur de lantenne sera la valeur dans lindex 0
-        this.tableauAntenne[0] = antenne;
+        this.tableauAntenne[0] = antenneSource;
 
         //valeur de lantenneAutre sera la valeur dans lindex 1
-        this.tableauAntenne[1] = antenneDeux;
+        this.tableauAntenne[1] = antenneDestination;
     }
 
     //=======PARTIE RAYANE EL AHMADI======//
-    //on doit comprendre le but de cette méthode !!!
 
     public Antenne getAutreAntenne(Antenne a){
         if (a == null) return null;

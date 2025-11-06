@@ -46,11 +46,11 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
     //On creer cet attribut pour pouvoir generer un numero de connexion unique pour chaque appel
     private static  int prochainNumConnexion=0;
     //On va stocker le nombre dantenne creer dans une liste pour utiliser dans notre methode
-    private static List<Antenne> antennes = new ArrayList<>();
+    private  List<Antenne> antennes = new ArrayList<Antenne>();
     //On va creer une liste pour stocker les connexions a partir de listeOrdonnee
-    private static ListeOrdonne connexions=new ListeOrdonne(50);
+    private  ListeOrdonne connexions = new ListeOrdonne(50);
     private final Random generateur = new Random();
-    private static final List<Cellulaire> cellulaires = new ArrayList<>();
+    private  final List<Cellulaire> cellulaires = new ArrayList<>();
 
     //private final ListeOrdonne<Connexion> connexions = new ListeOrdonne<>();   ancien attribut du prof
 
@@ -60,7 +60,7 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
 	 * @return instance
 	 */
 
-	public static GestionnaireReseau getInstance() {
+	public static/**/ GestionnaireReseau getInstance() {
 		return instance;
 	}
 
@@ -117,14 +117,12 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
     // ==================== Utile pour l'étape 3.3.1 ====================
     public Antenne trouverAntenneLaPlusProche(Position p) {
         Antenne laPlusProche = null;
-        double dmin = Double.POSITIVE_INFINITY; //a revoir le POSITIVE_INFINITY
-
-        //================revoir la variable "POSITIVE_INFINITY"======================
-
+        double distanceMin = antennes.getFirst().distance(p);
         for (Antenne a : antennes) {
-            double d = a.distance(p);
-            if (d < dmin) {
-                dmin = d;
+            double distance = a.distance(p);
+
+            if (distance < distanceMin) {
+                distanceMin = distance;
                 laPlusProche = a;
             }
         }
@@ -138,7 +136,7 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
 
     //Creation de la méthode GestionnaireReseau::relayerAppel- 3.3.2 - Étape 2
     //je ne suis pas sur
-    public static int relayerAppel(String numeroAppele,String numeroAppelant,Antenne antenneDeBase) {
+    public int relayerAppel(String numeroAppele,String numeroAppelant,Antenne antenneDeBase) {
 
         //On va gener un numero de connexion unique avec la methode creer plus haut (numConnexionUnique)
         int numConnexion = numConnexionUnique();
@@ -156,16 +154,13 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
             Cellulaire cellulaireQuiRepond = antenneCourante.repondre(numeroAppele, numeroAppelant, numConnexion);
 
             //reference valide donc non null alors ok(5)
-            if (cellulaireQuiRepond != null) {destinaire = cellulaireQuiRepond;antenneDestination = antenneCourante;}
-
-            //Si antenne renvoie une valeur alors indique que antenne a repondu donc antenne reference valide
-            if (antenneCourante != null) {
-
-                //on creer une connexion a partir des infos valides quon a et on lajoute a la liste(4)
+            if (cellulaireQuiRepond != null) {
+                destinaire = cellulaireQuiRepond;
+                antenneDestination = antenneCourante;
+                //Antenne reference valide donc on creer une connexion
                 Connexion connexionCreer = new Connexion(numConnexion, antenneDeBase, antenneCourante);
                 connexions.inserer(connexionCreer);
-                return numConnexion;}
-        }
+                return numConnexion;}}
         return Cellulaire.NON_CONNECTE;
 
 
@@ -202,7 +197,7 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
 //revoir le nom des variables pour que sa concorde avec tout le reste du projet
     // Recherche dans la liste de connexion
     private Connexion trouverConnexion(int numCo) {
-        for (Connexion c : connexions) {
+        for (Connexion c : connexions.getDonnee()) {
             if (c.getNumConnexion() == numCo) return c;
         }
         return null;

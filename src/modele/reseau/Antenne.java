@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Antenne extends ObjetPhysique implements UniteCellulaire {
-    private final GestionnaireReseau reseau;
+    private GestionnaireReseau reseau;
     private final List<Cellulaire> cellulaires = new ArrayList<>();
 
     //Constructeur de l'antenne
@@ -35,6 +35,13 @@ public class Antenne extends ObjetPhysique implements UniteCellulaire {
     public void enleverCellulaire(Cellulaire c) { cellulaires.remove(c); }
     public List<Cellulaire> getCellulaires() { return cellulaires; } // pratique pour 3.3.2 repondre()
 
+    private Cellulaire trouverCellulaire(String numero) {
+        for (Cellulaire c : cellulaires) {
+            if (c.comparerNumero(numero)) return c;
+        }
+        return null;
+    }
+
     //===========================================================================================================
 
     //Raytoch---------------
@@ -49,7 +56,7 @@ public class Antenne extends ObjetPhysique implements UniteCellulaire {
     //appelle des méthodes implementer de l'interface UniteCellulaire
     @Override
     public int appeler(String numeroAppele,String numeroAppelant,Antenne antenneConnecte){
-        return GestionnaireReseau.relayerAppel(numeroAppele,numeroAppelant,antenneConnecte);
+        return reseau.relayerAppel(numeroAppele,numeroAppelant,antenneConnecte);
     }
 
     @Override
@@ -76,8 +83,10 @@ public class Antenne extends ObjetPhysique implements UniteCellulaire {
     public void finAppelDistant(String numeroAppele,int numeroConnexion){}
 
     @Override
-    public boolean envoyer(Message message, int numeroConnexion) {
-        return reseau.relayerMessage(this, message, numeroConnexion);
+    public void envoyer(Message message, int numeroConnexion) {
+        reseau.relayerMessage(this, message, numeroConnexion);
+        return ;
+
     }
     /*problème identique a la methode envoyer message de la classe Cellulaires
       entre le boolean et la valeur retourner

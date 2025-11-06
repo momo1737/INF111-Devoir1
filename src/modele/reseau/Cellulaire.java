@@ -1,5 +1,6 @@
 package modele.reseau;
 
+import modele.gestionnaires.GestionnaireScenario;
 import modele.physique.ObjetMobile;
 import modele.physique.Position;
 import java.util.Random;
@@ -133,24 +134,22 @@ vérifier avec l'équipe
     @Override
     public void finAppelDistant(String numeroAppele,int numeroConnexion){}
 
-    // PARTIE DE RAYANE EL AHMADI////////
     @Override
-    public boolean envoyer(Message message, int numeroConnexion) {
-        if (!estConnecte()) return false;
-        if (this.numeroConnexion != numeroConnexion) return false;
-        if (antenneConnectee == null) return false;
+    public void envoyer(Message message, int numeroConnexion) {
+        if (!estConnecte()) return;
+        if (this.numeroConnexion != numeroConnexion) return;
+        if (antenneConnectee == null) return ;
+        if(numeroConnecte == null)return;
 
-        return antenneConnectee.envoyer(message, numeroConnexion);
-        /*
-        erreur puisque la méthode est censé retourner un boolean
-        et non des variable de message(message, numeroConnexion),
-        donc il faut revoir sa avec rayane et le changer
-        */
+        if(message == null){
+            String Message = GestionnaireScenario.obtenirMessage(numeroLocal);
+
+        }
+        antenneConnectee.envoyer(message, numeroConnexion);
     }
     @Override
     public void recevoir (Message message){
         System.out.println("Numero local est:" +numeroLocal + "et le message est: " +message);
     }
-
 
 }
