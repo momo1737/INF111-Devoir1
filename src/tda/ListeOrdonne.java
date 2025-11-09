@@ -57,5 +57,34 @@ public class ListeOrdonne {
         return true;
     }
 
+    //nom de méthode a revoir... anglais/francais
+    // Supprime avec le numéro de connexion
+    public boolean supprimer(int numero) {
+        int g = 0, d = n - 1;
+
+        // Recherche binaire pour trouver l'index du numéro
+        while (g <= d) {
+            int m = (g + d) / 2;
+            int numM = data[m].getNumConnexion();//surement a remplacer par donnee dans les attribut de la liste
+
+            if (numM == numero) {
+                // Décaler à gauche à partir de m
+                for (int i = m; i < n - 1; i++) {
+                    data[i] = data[i + 1];
+                }
+
+                // Nettoyer la dernière case et réduire la taille
+                data[n - 1] = null;
+                n--;
+                return true;
+            }
+            if (numM < numero) g = m + 1;
+            else d = m - 1;
+        }
+
+        return false;
+    }
+
+
 
 }

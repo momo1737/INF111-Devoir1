@@ -203,6 +203,39 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
         return null;
     }
 
+    //Supprime l'objet "connexion" des connexions
+
+    private void supprimerConnexion(int numeroConnexion) {
+        Connexion c = getConnexion(numeroConnexion);
+        if (c != null) {
+            connexions.supprimer(c.getNumConnexion());
+        }
+    }
+
+    // Relayer la fin de l'Appel (l'antenne source sait qu'on a raccrocher)
+    public void relayerFinAppel(int numeroConnexion, Antenne source, String numeroAppele) {
+
+
+        Connexion connexion = getConnexion(numeroConnexion);
+        if (connexion == null) {
+            return;
+        }
+
+        //  Prendre l'Autre antenne
+        Antenne autre = connexion.getAutreAntenne(source);
+        if (autre != null) {
+
+            // Notifie l?autre côté (le cellulaire destinataire) via son antenne
+            autre.finAppelDistant(numeroAppele, numeroConnexion);
+        }
+
+        // Enleve la connexion
+
+        supprimerConnexion(numeroConnexion);
+    }
+
+
+
 
     /**
 	 * s'exécute en continue pour simuler le système

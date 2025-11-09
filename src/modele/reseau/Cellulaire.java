@@ -129,10 +129,34 @@ vérifier avec l'équipe
     }
 
     @Override
-    public void finAppelLocal(String numeroAppele,int numeroConnexion){ }
+    public void finAppelLocal(String numeroAppele,int numeroConnexion){
+
+        // Si c'est pas connecté ou si les numero de connexion sont differents, ca fait rien
+        if (!estConnecte() || this.numeroConnexion != numeroConnexion) {
+            return;
+        }
+
+        //Si c'est connecté, fini l'appel
+        if (antenneConnectee != null) {
+            antenneConnectee.finAppelLocal(numeroAppele, numeroConnexion);
+        }
+
+        // Enlève le cellulaire (c'est plus en communication)
+        this.numeroConnexion = NON_CONNECTE;
+        this.numeroConnecte = null;
+    }
 
     @Override
-    public void finAppelDistant(String numeroAppele,int numeroConnexion){}
+    public void finAppelDistant(String numeroAppele,int numeroConnexion){
+        // Verifie si les numero de connexion correspondent
+        if (this.numeroConnexion == numeroConnexion) {
+
+            // Enlève le cellulaire (c'est plus en communication)
+            this.numeroConnexion = NON_CONNECTE;
+            this.numeroConnecte = null;
+        }
+    }
+
 
     @Override
     public void envoyer(Message message, int numeroConnexion) {

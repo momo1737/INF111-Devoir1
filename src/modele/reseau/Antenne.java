@@ -77,10 +77,24 @@ public class Antenne extends ObjetPhysique implements UniteCellulaire {
     }
 
     @Override
-    public void finAppelLocal(String numeroAppele,int numeroConnexion){ }
+    public void finAppelLocal(String numeroAppele,int numeroConnexion) {
+
+        // Recoit la demande de fin d'appel
+        GestionnaireReseau.getInstance().relayerFinAppel(numeroConnexion, this, numeroAppele);
+    }
 
     @Override
-    public void finAppelDistant(String numeroAppele,int numeroConnexion){}
+    public void finAppelDistant(String numeroAppele,int numeroConnexion) {
+
+        // Parcourt les cellulaires connectés pour trouver celui avec le meme numero et ensuite signale que le cell a racroché
+        for (Cellulaire c : cellulaires) {
+            if (c != null && c.comparerNumero(numeroAppele)) {
+                c.finAppelDistant(numeroAppele, numeroConnexion);
+                break;
+            }
+        }
+    }
+
 
     @Override
     public void envoyer(Message message, int numeroConnexion) {

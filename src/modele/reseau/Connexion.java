@@ -57,4 +57,13 @@ public class Connexion {
             tableauAntenne[1] = nouvelle;
         }
     }
+    //code de Raytoch, mais je ne pense pas que se soit utile vu que l'on a déjà
+    //misAJourAntenne...à verifier
+    //et aussi fait dans la partie de rayane el amadi en haut
+    /*public Antenne getAutreAntenne(Antenne antenne) {
+        if (tableauAntenne[0] == antenne) return tableauAntenne[1];
+        if (tableauAntenne[1] == antenne) return tableauAntenne[0];
+        return null;*/
+    }
+
 }
