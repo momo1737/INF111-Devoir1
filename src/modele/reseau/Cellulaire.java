@@ -90,7 +90,7 @@ public class Cellulaire extends ObjetMobile implements UniteCellulaire {
         NvAntenne.ajouterCellulaire(this);
         antenneConnectee = NvAntenne;
 
-        // >>> trace demandée pour la validation <<<------suggestion de chat pour tester comme le prof la demander
+        //Validation
         System.out.println("[SWITCH] " + numeroLocal + " -> " + antenneConnectee);
     }
 
