@@ -28,8 +28,8 @@ import observer.MonObserver;
 
 public class PanneauPrincipal extends JPanel implements MonObserver{
 
-    private static int RAYON_ANTENNE = 20;
-    private static int RAYON_INDIVIDU = 10;
+    private static final int RAYON_ANTENNE = 20;
+    private static final int RAYON_INDIVIDU = 10;
 
     Dimension taille;
     GestionnaireReseau reseau = GestionnaireReseau.getInstance();

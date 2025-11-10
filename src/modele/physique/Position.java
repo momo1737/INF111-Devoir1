@@ -33,15 +33,15 @@ public class Position {
 
     //Calculer la distance euclidienne
     public double distance(Position autre){
-        double Dx = autre.positionX- this.positionX;
-        double Dy = autre.positionY - this.positionY;
-        double sommeDXY = Math.pow(Dx,2) + Math.pow(Dy,2);
-        return Math.sqrt(sommeDXY);
+        double dx = autre.positionX- this.positionX;
+        double dy = autre.positionY - this.positionY;
+        double sommeDxy = Math.pow(dx,2) + Math.pow(dy,2);
+        return Math.sqrt(sommeDxy);
     }
 
     //toString pour afficher la position en format (x; y)
     @Override
     public String toString(){
-        return String.format("Postion = (%.2f;%.2f)",positionX,positionY);
+        return String.format("Position = (%.2f;%.2f)",positionX,positionY);
     }
 }

@@ -32,10 +32,12 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
     public static final int    PERIODE_SIMULATION_MS = 250;
     public static final double VITESSE               = 10.0;
     public static final double DEVIATION_STANDARD    = 0.05;
-    public static final int    NB_CELLULAIRES        = 2;
-    public static final int    NB_ANTENNES           = 30;
+    public static final int    NB_CELLULAIRES        = 30;
+    public static final int    NB_ANTENNES           = 10;
     public static final int    CODE_NON_CONNECTE     = -1;
     public static final int    NB_CRIMINELS          = 10;
+
+
 
 
     // Attributs demandés
@@ -134,7 +136,7 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
         int numConnexion = numConnexionUnique();
 
         //Création des variables vides pour stocker
-        Cellulaire destinaire = null;
+        Cellulaire destinataire = null;
         Antenne antenneDestination = null;
 
         //Parcourir toutes les antennes avec la methode
@@ -146,7 +148,7 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
             Cellulaire cellulaireQuiRepond = antenneCourante.repondre(numeroAppele, numeroAppelant, numConnexion);
 
             if (cellulaireQuiRepond != null) {
-                destinaire = cellulaireQuiRepond;
+                destinataire = cellulaireQuiRepond;
                 antenneDestination = antenneCourante;
 
                 //Antenne reference valide donc on crée une connexion

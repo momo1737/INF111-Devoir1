@@ -30,7 +30,7 @@ public class CadrePrincipal extends JFrame implements Runnable{
 
     private void initCadre() {
 
-        // maximize la fenêtre
+        // Met en plein écran
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 

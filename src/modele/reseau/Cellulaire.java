@@ -56,8 +56,8 @@ public class Cellulaire extends ObjetMobile implements UniteCellulaire {
     }
 
     //Comparer un numéro externe avec le numéro local
-    public boolean comparerNumero(String numeroext){
-        return this.numeroLocal != null && this.numeroLocal.equals(numeroext);
+    public boolean comparerNumero(String numeroExt){
+        return this.numeroLocal != null && this.numeroLocal.equals(numeroExt);
     }
 
     //toString pour afficher le numéro local et la position
@@ -74,12 +74,11 @@ public class Cellulaire extends ObjetMobile implements UniteCellulaire {
 
     //Basculer vers l'antenne la plus proche
     private void mettreAJourAntenne(){
-        Antenne NvAntenne = reseau.trouverAntenneLaPlusProche(this.getPosition());
-        if (NvAntenne == null){
+        Antenne nvAntenne = reseau.trouverAntenneLaPlusProche(this.getPosition());
+        if (nvAntenne == null){
             return;
         }
-
-        else if (NvAntenne == antenneConnectee){
+        else if (nvAntenne == antenneConnectee){
             return;
         }
 
@@ -87,8 +86,8 @@ public class Cellulaire extends ObjetMobile implements UniteCellulaire {
             antenneConnectee.enleverCellulaire(this);
         }
 
-        NvAntenne.ajouterCellulaire(this);
-        antenneConnectee = NvAntenne;
+        nvAntenne.ajouterCellulaire(this);
+        antenneConnectee = nvAntenne;
 
         //Validation
         System.out.println("[SWITCH] " + numeroLocal + " -> " + antenneConnectee);
@@ -162,7 +161,7 @@ public class Cellulaire extends ObjetMobile implements UniteCellulaire {
         if(numeroConnecte == null)return;
 
         if(message == null){
-            String Message = GestionnaireScenario.obtenirMessage(numeroLocal); //Récupérer un message par défaut
+            String messageGenere = GestionnaireScenario.obtenirMessage(numeroLocal); //Récupérer un message par défaut
         }
 
         antenneConnectee.envoyer(message, numeroConnexion);
