@@ -1,7 +1,5 @@
 package tda;
 
-//classe temporaire selon chat uniquement pour pouvoir lancé le jeu
-//mais elle devra être modifier pour répondre aux exigence du prof dans l'annexxe A
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
@@ -12,12 +10,12 @@ public class FileSChainee {
         elements = new LinkedList<>();
     }
 
-    // ajoute un élément à la file
+    //Ajouter un élément à la fin de la file
     public void enfiler(Object element) {
         elements.addLast(element);
     }
 
-    // retire le premier élément de la file
+    //Retirer le premier élément de la file
     public String defiler() throws NoSuchElementException {
         if (elements.isEmpty()) {
             throw new NoSuchElementException("File vide");
@@ -25,7 +23,7 @@ public class FileSChainee {
         return (String) elements.removeFirst();
     }
 
-    // utile pour debug
+    // Vérifier si la file est vide
     public boolean estVide() {
         return elements.isEmpty();
     }

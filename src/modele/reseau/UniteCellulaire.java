@@ -2,21 +2,22 @@ package modele.reseau;
 
 public interface UniteCellulaire {
 
+    //Lance un appel et retourne le numéro de connexion créé
     int appeler(String numeroAppele,String numeroAppelant,Antenne antenneConnecte);
-    //entier, indiquant le numéro de connexion
 
-    Cellulaire repondre(String numeroAppele,String numeroAppelant,int numeroCellulaire);
-    //Cellulaire, référence au cellulaire qui répond
+    //Répond à un appel et retourne le cellulaire qui accepte l'appel
+    Cellulaire repondre(String numeroAppele,String numeroAppelant,int numeroConnexion);
 
+    //Terminer un appel localement
     void finAppelLocal(String numeroAppele,int numeroConnexion);
-    //aucune sortie
 
+    //Terminer un appel de l'autre côté
     void finAppelDistant(String numeroAppele,int numeroConnexion);
-    //aucune sortie
 
+    //Envoyer un message
     void envoyer(Message message,int numeroConnexion);
-    //aucune sortie
 
+    //Recevoir un message
     void recevoir(Message message);
-    //aucune sortie
+
 }

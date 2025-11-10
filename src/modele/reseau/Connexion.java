@@ -2,57 +2,59 @@ package modele.reseau;
 
 public class Connexion {
 
-    //Constante nombre dantennes
-    public static final int NB_ANTENNES=2;
+    //Constante nombre d'antennes
+    public static final int NB_ANTENNES = 2;
 
     //Attributs
     private int numConnexion;
 
     private Antenne [] tableauAntenne = new Antenne[NB_ANTENNES];
 
-    //Constructeur par parametre
-    public Connexion(int numConnexion,Antenne antenne,Antenne antenneDeux) {
-
+    // Associe la connexion à deux antennes
+    public Connexion(int numConnexion,Antenne antenneSource,Antenne antenneDestination) {
         this.numConnexion = numConnexion;
 
-        //valeur de lantenne sera la valeur dans lindex 0
-        this.tableauAntenne[0] = antenne;
+        //La valeur de l'antenne sera la valeur dans l'index (0)
+        this.tableauAntenne[0] = antenneSource;
 
-        //valeur de lantenneAutre sera la valeur dans lindex 1
-        this.tableauAntenne[1] = antenneDeux;
+        //La valeur de l'autre antenne sera la valeur dans l'index (1)
+        this.tableauAntenne[1] = antenneDestination;
     }
 
-    //Passons aux services
+    // Retourne l’autre antenne de la connexion (si présente)
+    public Antenne getAutreAntenne(Antenne a) {
+        if (a == null) return null;
+        if(tableauAntenne[0] == a) return tableauAntenne[1];
+        if(tableauAntenne[1] == a) return tableauAntenne[0];
+        return null;
+    }
 
-    //getter
+    //Getter
     public int getNumConnexion(){
-        return numConnexion;}
+        return numConnexion;
+    }
 
-    //Methode equals qui va comparer les numeros de connexion
+    //Methode equals qui va comparer les numéros de connexion
     @Override
     public boolean equals(Object obj){
+
         //si les deux objets equivalents return true
         if (this == obj) return true;
-        //Verification si lobjet est bien une connexion et comparer
+
+        //Verification si l'objet est une connexion et compare
         if (!(obj instanceof Connexion)) return false;
         Connexion autre = (Connexion) obj;
-        return this.numConnexion == autre.numConnexion;}
-
+        return this.numConnexion == autre.numConnexion;
+    }
 
     //Mettre à jour une antenne
     public void miseAJourAntenne(Antenne ancienne, Antenne nouvelle) {
         if (tableauAntenne[0] == ancienne) {
             tableauAntenne[0] = nouvelle;
         }
+
         else if (tableauAntenne[1] == ancienne) {
             tableauAntenne[1] = nouvelle;
         }
-    }
-
-    //
-    public Antenne getAutreAntenne(Antenne antenne) {
-        if (tableauAntenne[0] == antenne) return tableauAntenne[1];
-        if (tableauAntenne[1] == antenne) return tableauAntenne[0];
-        return null;
     }
 }

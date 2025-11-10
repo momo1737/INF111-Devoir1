@@ -11,7 +11,7 @@ public class Position {
         this.positionY = positionY;
     }
 
-    //getter et setter -positionX
+    //Getter et Setter (position X)
 
     public double getPositionX(){
         return positionX;
@@ -21,7 +21,7 @@ public class Position {
         this.positionX=positionX;
     }
 
-    //getter et setter -positionY
+    //Getter et Setter (position Y)
 
     public double getPositionY(){
         return positionY;
@@ -31,7 +31,7 @@ public class Position {
         this.positionY = positionY;
     }
 
-    //méthode de la distance euclidienne
+    //Calculer la distance euclidienne
     public double distance(Position autre){
         double Dx = autre.positionX- this.positionX;
         double Dy = autre.positionY - this.positionY;
@@ -39,7 +39,7 @@ public class Position {
         return Math.sqrt(sommeDXY);
     }
 
-    //toString pour afficher la position
+    //toString pour afficher la position en format (x; y)
     @Override
     public String toString(){
         return String.format("Postion = (%.2f;%.2f)",positionX,positionY);

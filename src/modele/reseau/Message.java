@@ -10,24 +10,26 @@ public class Message {
     private  String numeroDestination;
     private  String message;
 
-    public Message(String numeroDestination, String message) {
-        this.numeroDestination=numeroDestination;
-        this.message=message;
 
+    public Message(String numeroDestination, String message) {
+        this.numeroDestination=numeroDestination; //Destinataire
+        this.message=message; //Contenu du message
     }
-    //Accesseur qui permet d'obtenir la destination du numero
+
+
+    //Getter qui permet d'obtenir la destination du numero
     public String getNumeroDestination() {
         return numeroDestination;
     }
-    //Accesseur qui permet d'obtenir le contenu d'un message
+
+    //Getter qui permet d'obtenir le contenu d'un message
     public String getMessage() {
         return message;
-
     }
-    //Phase de test qui retourne le numeroDestination et le message
+
+    //toString pour afficher le message
     @Override
     public String toString(){
         return "Message destination = " + numeroDestination+","+"Message:"+message;
     }
-
 }

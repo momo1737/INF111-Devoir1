@@ -1,12 +1,14 @@
 package modele.physique;
 import java.util.Random;
+
+
 public abstract class ObjetMobile extends ObjetPhysique {
-    protected double direction ; //mettre a 0 comme demandé dans l'énoncé
+    protected double direction;
     protected double vitesse;
     protected double deviation;
     private static final Random generateurD = new Random();
 
-    //Constructeur avec la direction excluse
+    //Constructeur avec la direction excluse (elle commence toujours à 0)
     public ObjetMobile(Position position,double vitesse,double deviation){
         super(position);
         this.direction = 0;
@@ -14,7 +16,7 @@ public abstract class ObjetMobile extends ObjetPhysique {
         this.deviation = deviation;
     }
 
-    //méthode se déplacer
+    //Mettre à jour la position selon la direction et la vitesse
     public void seDeplacer(){
         direction += generateurD.nextGaussian() * deviation;
         double posX = position.getPositionX() + vitesse * Math.cos(direction);

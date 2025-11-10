@@ -16,7 +16,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-//import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -58,23 +57,21 @@ public class PanneauPrincipal extends JPanel implements MonObserver{
 
     }
 
-    /**
-     * m?thode h?rit? qui dessine ? la fen?tre
-     */
+    //Dessine le contenu du panneau
     public void paintComponent(Graphics g) {
 
-        // convertie en engin graphique 2D
+        // Convertis en engin graphique 2D
         Graphics2D g2 = (Graphics2D) g;
 
-        // appel au paint de base
+        // Appel au paint de base
         super.paintComponent(g);
-        // efface l'écran
-        g2.clearRect(0, 0, taille.width, taille.height);
 
+        // Efface l'écran
+        g2.clearRect(0, 0, taille.width, taille.height);
         dessineCellulaires(g2);
         dessineAntennes(g2);
 
-        //gets rid of the copy
+        //Supprime la copie
         g2.dispose();
     }
 
@@ -120,13 +117,10 @@ public class PanneauPrincipal extends JPanel implements MonObserver{
      * @param g r?f?rence ? engin graphique
      */
     public void dessineAntennes(Graphics2D g) {
-
-        //ArrayList<Antenne> antennes = reseau.getAntennes(); m?me principe que pour Cellulaire aller voir plus haut
         List<Antenne> antennes = reseau.getAntennes();
 
-        // dessine toutes les antennes selon les param?tres
+        //Dessine toutes les antennes selon les paramètres
         for(Antenne antenne : antennes) {
-
             Position position = antenne.getPosition();
             g.setColor(Color.DARK_GRAY);
             g.fillOval((int)position.getPositionX()-RAYON_ANTENNE, (int)position.getPositionY()-RAYON_ANTENNE, 2*RAYON_ANTENNE, 2*RAYON_ANTENNE);
@@ -137,5 +131,4 @@ public class PanneauPrincipal extends JPanel implements MonObserver{
     public void avertir() {
         rafraichirDessin();
     }
-
 }

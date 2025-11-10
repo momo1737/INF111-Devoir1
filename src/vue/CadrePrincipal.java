@@ -4,6 +4,7 @@ package vue;
  *
  * Int?gre la logique de confirmation de fermeture de fen?tre
  */
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
@@ -20,8 +21,8 @@ public class CadrePrincipal extends JFrame implements Runnable{
     @Override
     public void run() {
 
-        initCadre();
-        initPanneau();
+        initCadre(); //Configure la fenêtre
+        initPanneau(); //Installe le panneau principal
 
         setVisible(true);
     }
@@ -33,7 +34,7 @@ public class CadrePrincipal extends JFrame implements Runnable{
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 
-        // ajoute une gestion du EXIT par confirmation pop-up
+        // Demande une confirmation avant de fermer
         this.addWindowListener(new WindowAdapter() {
 
             // gestionnaire d'événement pour la fermeture
@@ -41,30 +42,30 @@ public class CadrePrincipal extends JFrame implements Runnable{
 
                 // ajoute une demande de confirmation
                 int result = JOptionPane.showConfirmDialog(null,
-                        "Voulez-vous quitter?", "Confirmation de sortie: ",
+                        "Voulez-vous quitter ?", "Confirmation de sortie: ",
                         JOptionPane.YES_NO_OPTION);
 
-                // si la réponse est oui
-                if (result == JOptionPane.YES_OPTION){
-                    // ferme la fenêtre en activant la gestion de l'événement
+                // Si la réponse est OUI
+                if (result == JOptionPane.YES_OPTION) {
+
+                    //Ferme la fenêtre en activant la gestion de l'événement
                     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 }
-                else if (result == JOptionPane.NO_OPTION){
-                    // sinon, désactive la gestion de l'événement
+                else if (result == JOptionPane.NO_OPTION) {
+
+                    // Désactive la gestion de l'événement
                     setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                 }
             }
         });
-
     }
 
     private void initPanneau() {
 
-        // instancie notre panneau principal
+        // Instancier le panneau principal
         panneauPrincipal = new PanneauPrincipal(tailleEcran);
 
-        // cette ligne remplace le JPanel existant dans le JFrame
-        // par notre classe définis
+        //Remplace le JPanel existant dans le JFrame par notre classe définie
         this.setContentPane(panneauPrincipal);
     }
 

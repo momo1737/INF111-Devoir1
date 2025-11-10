@@ -3,29 +3,26 @@ package tda;
 import modele.reseau.Connexion;
 
 public class ListeOrdonne {
-
-    private final Connexion[] data;
+    private final Connexion[] donnee;
     private int n = 0;
 
-    //constructeur
-
+    //Constructeur
     public ListeOrdonne(int capacite) {
-        data = new Connexion[capacite];
+        donnee = new Connexion[capacite];
     }
 
-    /* recherche binaire par numero
-    g = gauche, d = droite, m = milieu
-    */
+    public  Connexion[] getDonnee(){return this.donnee;}
 
+    // Recherche binaire par numero
     public Connexion rechercher(int numero) {
-        int g = 0, d = n - 1;
-        while (g <= d) {
-            int m = (g + d) / 2;
-            int numM = data[m].getNumConnexion();
+        int gauche = 0, droite = n - 1;
+        while (gauche <= droite) {
+            int centre = (gauche + droite) / 2;
+            int numeroCentre = donnee[centre].getNumConnexion();
 
-            if (numM == numero) return data[m];
-            if (numM < numero) g = m + 1;
-            else d = m -1;
+            if (numeroCentre == numero) return donnee[centre];
+            if (numeroCentre < numero) gauche = centre + 1;
+            else droite = centre -1;
         }
         return null;
     }
@@ -33,7 +30,7 @@ public class ListeOrdonne {
 
     public boolean inserer(Connexion connexion) {
         if (connexion == null) return false;
-        if (n == data.length) return false;
+        if (n == donnee.length) return false;
 
         int numConnexion = connexion.getNumConnexion();
 
@@ -42,46 +39,44 @@ public class ListeOrdonne {
 
         //Trouver la position ou inserer
         int index = 0;
-        while (index <n && data[index].getNumConnexion() < numConnexion) {
+        while (index <n && donnee[index].getNumConnexion() < numConnexion) {
             index ++;
         }
 
         // Décaler à droite
         for (int i = n; i > index; i--) {
-            data[i] = data[i - 1];
+            donnee[i] = donnee[i - 1];
         }
 
         //Inserer
-        data[index] = connexion;
+        donnee[index] = connexion;
         n++;
         return true;
     }
 
-    // Supprime avec le numéro de connexion
     public boolean supprimer(int numero) {
-        int g = 0, d = n - 1;
+        int gauche = 0, droite = n - 1;
 
         // Recherche binaire pour trouver l'index du numéro
-        while (g <= d) {
-            int m = (g + d) / 2;
-            int numM = data[m].getNumConnexion();
+        while (gauche <= droite) {
+            int centre = (gauche + droite) / 2;
+            int numCentre = donnee[centre].getNumConnexion();
 
-            if (numM == numero) {
-                // Décaler à gauche à partir de m
-                for (int i = m; i < n - 1; i++) {
-                    data[i] = data[i + 1];
+            if (numCentre == numero) {
+
+                // Décaler à gauche à partir du milieu
+                for (int i = centre; i < n - 1; i++) {
+                    donnee[i] = donnee[i + 1];
                 }
 
                 // Nettoyer la dernière case et réduire la taille
-                data[n - 1] = null;
+                donnee[n - 1] = null;
                 n--;
                 return true;
             }
-            if (numM < numero) g = m + 1;
-            else d = m - 1;
+            if (numCentre < numero) gauche = centre + 1;
+            else droite =centre - 1;
         }
-
         return false;
     }
-
 }

@@ -13,107 +13,157 @@ package modele.reseau;
  * @version Hiver 2021
  */
 
+//===========Ajouts pour les TDA=================
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import observer.MonObservable;
 import tda.ListeOrdonne;
+
+//==========Ajouts des classes===================
+import modele.gestionnaires.GestionnaireScenario;
 import modele.physique.Carte;
 import modele.physique.Position;
-import modele.gestionnaires.GestionnaireScenario;
+import observer.MonObservable;
+
 
 public class GestionnaireReseau extends MonObservable implements Runnable {
 
+    // Constantes demandées
+    public static final int    PERIODE_SIMULATION_MS = 250;
+    public static final double VITESSE               = 10.0;
+    public static final double DEVIATION_STANDARD    = 0.05;
+    public static final int    NB_CELLULAIRES        = 2;
+    public static final int    NB_ANTENNES           = 30;
+    public static final int    CODE_NON_CONNECTE     = -1;
+    public static final int    NB_CRIMINELS          = 10;
+
+
+    // Attributs demandés
     private boolean mondeEnVie = true;
-    private static GestionnaireReseau instance = new GestionnaireReseau();
+    private static   GestionnaireReseau instance = new GestionnaireReseau();
 
-    //Constantes
+    //Générer un numero de connexion unique pour chaque appel
+    private static  int prochainNumConnexion = 0;
 
-    public static final int PERIODE_SIMULATION_MS = 100;
-    public static final double VITESSE = 10.0;
-    public static final double DEVIATION_STANDARD = 0.05;
-    public static final int NB_CELLULAIRES = 30;
-    public static final int NB_ANTENNES = 5;
-    public static final int CODE_NON_CONNECTE = -1;
-    public static final int NB_CRIMINELS  = 5;
+    //On va stocker le nombre d'antennes crées dans une liste pour utiliser dans notre methode
+    private  List<Antenne> antennes = new ArrayList<Antenne>();
 
-    //Attributs
-
-    private Random generateur;
-    private List<Antenne> antennes;
-    private List<Cellulaire> cellulaires;
-    private ListeOrdonne connexions;
-
-
-    //Methodes privées
+    //Liste pour stocker les connexions à partir de listeOrdonnee
+    private  ListeOrdonne connexions = new ListeOrdonne(50);
+    private final Random generateur = new Random();
+    private  final List<Cellulaire> cellulaires = new ArrayList<>();
 
     /**
      * m�thode permettant d'obtenir une r�f�rence sur le Gestionnaire R�seau
      * @return instance
      */
-    public static GestionnaireReseau getInstance() {
+
+    public static/**/ GestionnaireReseau getInstance() {
         return instance;
     }
 
+
+    //Constructeur
     private GestionnaireReseau() {
-        this.generateur = new Random();
-        this.antennes = new ArrayList<>();
-        this.cellulaires = new ArrayList<>();
-        this.connexions = new tda.ListeOrdonne(500);
     }
 
-    // Crée des antennes à des positions aléatoires
+    /**
+     * permet de mettre fin � la simulation
+     *@param mondeEnVie
+     */
+
+    public void finDeSimulation() {
+        this.mondeEnVie = false;
+    }
+
+    //Création d'antenne à une position aléatoire (selon NB_ANTENNES)
     private void creeAntennes() {
-        //vider la liste
         antennes.clear();
         for (int i = 0; i < NB_ANTENNES; i++) {
-            Position position = Carte.positionAleatoire();
-            antennes.add(new Antenne(position));
+            Position p = Carte.positionAleatoire();
+            antennes.add(new Antenne(p));
         }
     }
 
-    //Créer des cellulaires
-
-    private void creeCellulaires(){
-        //vider la liste
+    //Création de cellulaires à une position aléatoire (selon NB_CELLULAIRES)
+    private void creeCellulaires() {
         cellulaires.clear();
-        for (int i = 0; i <NB_CELLULAIRES; i++){
-            //Obtenir un numero aleatoire
-            String num = GestionnaireScenario.obtenirNouveauNumeroStandard();
-
-            //Position aléatoire sur la carte
+        for (int i = 0; i < NB_CELLULAIRES; i++) {
+            String numero = GestionnaireScenario.obtenirNouveauNumeroStandard();
             Position position = Carte.positionAleatoire();
-
-            //Créer le cellulaire
-            Cellulaire cellulaire = new Cellulaire(num, position, VITESSE, DEVIATION_STANDARD);
-
+            Cellulaire cellulaire = new Cellulaire(numero, position, VITESSE, DEVIATION_STANDARD);
             cellulaires.add(cellulaire);
         }
-
     }
 
+
+    // Référence aux antennes
+    public List<Antenne> getAntennes() {
+        return antennes; // retourne la r�f�rence (pas de copie)
+    }
+
+    //Référence aux cellulaires
+    public List<Cellulaire> getCellulaires() {
+        return cellulaires; // retourne la r�f�rence (pas de copie)
+    }
+
+    //Antenne la plus proche par rapport à une position
     public Antenne trouverAntenneLaPlusProche(Position p) {
-        Antenne best = null;
-        double dmin = Double.POSITIVE_INFINITY;
+        Antenne laPlusProche = null;
+        double distanceMin = antennes.getFirst().distance(p);
         for (Antenne a : antennes) {
-            double d = a.distance(p);
-            if (d < dmin) {
-                dmin = d;
-                best = a;
+            double distance = a.distance(p);
+
+            if (distance < distanceMin) {
+                distanceMin = distance;
+                laPlusProche = a;
             }
         }
-        return best;
+        return laPlusProche;
     }
-    // Services
-    public List<Antenne> getAntennes() {return antennes;}
-    public List<Cellulaire> getCellulaires() {return cellulaires;}
 
-    // Récupérer une connexion par son numéro (via ListeOrdonne)
+    //Générer un numero de connexion unique
+    public static int numConnexionUnique(){
+        return prochainNumConnexion++;
+    }
+
+    //Chercher le destinataire et créer la connexion
+    public int relayerAppel(String numeroAppele,String numeroAppelant,Antenne antenneDeBase) {
+
+        //Générer un numero de connexion unique
+        int numConnexion = numConnexionUnique();
+
+        //Création des variables vides pour stocker
+        Cellulaire destinaire = null;
+        Antenne antenneDestination = null;
+
+        //Parcourir toutes les antennes avec la methode
+        int nbAntenne = antennes.size();
+        for (int i = 0; i < nbAntenne; i++) {
+            Antenne antenneCourante = antennes.get(i);
+
+            //Demande à l’antenne si le cellulaire appelé répond
+            Cellulaire cellulaireQuiRepond = antenneCourante.repondre(numeroAppele, numeroAppelant, numConnexion);
+
+            if (cellulaireQuiRepond != null) {
+                destinaire = cellulaireQuiRepond;
+                antenneDestination = antenneCourante;
+
+                //Antenne reference valide donc on crée une connexion
+                Connexion connexionCreer = new Connexion(numConnexion, antenneDeBase, antenneCourante);
+                connexions.inserer(connexionCreer);
+                return numConnexion;
+            }
+        }
+        return Cellulaire.NON_CONNECTE;
+    }
+
+    //Récupère une connexion via ListeOrdonne
     private Connexion getConnexion(int numeroConnexion) {
         return connexions.rechercher(numeroConnexion);
     }
 
-    //Mettre a jour la connexion
+    //Mettre à jour la connexion
     public void mettreAJourConnexion(int numeroConnexion, Antenne ancienne, Antenne nouvelle) {
         Connexion connect = getConnexion(numeroConnexion);
         if (connect != null) {
@@ -121,8 +171,29 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
         }
     }
 
-    //Supprime l'objet "connexion" des connexions
+    //Relayer un message via la connexion vers l’antenne opposée.
+    public boolean relayerMessage(Antenne source, Message message, int numCo) {
+        if (source == null || message == null) return false;
 
+        Connexion co = trouverConnexion(numCo);
+        if (co == null) return false;
+
+        Antenne destination = co.getAutreAntenne(source);
+        if (destination == null) return false;
+
+        destination.recevoir(message);
+        return true;
+    }
+
+    // Recherche d’une connexion existante
+    private Connexion trouverConnexion(int numCo) {
+        for (Connexion connexion : connexions.getDonnee()) {
+            if (connexion.getNumConnexion() == numCo) return connexion;
+        }
+        return null;
+    }
+
+    //Supprime l'objet "connexion" des connexions
     private void supprimerConnexion(int numeroConnexion) {
         Connexion c = getConnexion(numeroConnexion);
         if (c != null) {
@@ -130,35 +201,27 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
         }
     }
 
-    // Relayer la fin de l'Appel (l'antenne source sait qu'on a raccrocher)
+    // Relayer la fin de l'Appel (l'antenne source sait qu'on a raccroché)
     public void relayerFinAppel(int numeroConnexion, Antenne source, String numeroAppele) {
-
 
         Connexion connexion = getConnexion(numeroConnexion);
         if (connexion == null) {
             return;
         }
 
-        //  Prendre l'Autre antenne
+        //  Prendre l'autre antenne
         Antenne autre = connexion.getAutreAntenne(source);
         if (autre != null) {
 
-            // Notifie l’autre côté (le cellulaire destinataire) via son antenne
+            // Notifie l'autre côté (le cellulaire destinataire) via son antenne
             autre.finAppelDistant(numeroAppele, numeroConnexion);
         }
 
-        // Enleve la connexion
-
+        // Enlève la connexion
         supprimerConnexion(numeroConnexion);
     }
 
-    /**
-     * permet de mettre fin � la simulation
-     * @param mondeEnVie
-     */
-    public void finDeSimulation() {
-        this.mondeEnVie = false;
-    }
+
 
 
     /**
@@ -166,30 +229,22 @@ public class GestionnaireReseau extends MonObservable implements Runnable {
      */
     @Override
     public void run() {
-		
 
-		creeAntennes();
-		creeCellulaires();
-		this.avertirLesObservers();
 
-		while(this.mondeEnVie) {	
-			
-			for(Cellulaire cell : cellulaires) {
-				cell.effectuerTour();
-			}
-			
-			this.avertirLesObservers();
-			
-			
-			try {
-				Thread.sleep(PERIODE_SIMULATION_MS);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+        creeAntennes();
+        creeCellulaires();
+        this.avertirLesObservers();
+
+        while(this.mondeEnVie) {
+            for(Cellulaire cell : cellulaires) {
+                cell.effectuerTour();
+            }
+            this.avertirLesObservers();
+            try {
+                Thread.sleep(PERIODE_SIMULATION_MS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
-
-
-
-
 }
